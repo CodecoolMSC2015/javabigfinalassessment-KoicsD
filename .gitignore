@@ -1,3 +1,9 @@
+# my data #
+ServerData/
+
+# created by my Eclipse #
+/build/
+
 
 # Created by https://www.gitignore.io/api/eclipse,intellij,java
 
@@ -114,4 +120,3 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
-/build/
