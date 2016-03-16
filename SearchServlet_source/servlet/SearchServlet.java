@@ -58,4 +58,15 @@ public class SearchServlet extends HttpServlet {
 		// TODO here to sign IOException occurred
 	}
 	
+	private String generateHTML(String title, String body) {
+		return "<html>\n"
+				+ "<head>\n"
+				+ "<title>" + title + "</title>\n"
+				+ "</head>\n"
+				+ "<body>\n"
+				+ body
+				+ "</body>\n"
+				+ "</html>\n";
+	}
+	
 }
