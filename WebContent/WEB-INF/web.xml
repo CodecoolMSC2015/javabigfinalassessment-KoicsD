@@ -11,7 +11,7 @@
   </welcome-file-list>
   <servlet>
     <servlet-name>search for persons</servlet-name>
-    <servlet-class>server.PersonStoreServerSocket</servlet-class>
+    <servlet-class>servlet.SearchServlet</servlet-class>
     <init-param>
       <param-name>host</param-name>
       <param-value>localhost</param-value>

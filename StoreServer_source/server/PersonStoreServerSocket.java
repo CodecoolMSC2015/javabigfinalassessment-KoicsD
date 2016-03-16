@@ -48,7 +48,7 @@ public class PersonStoreServerSocket implements AutoCloseable {
 		serverSocket.close();
 	}
 	
-	public static void main() {
+	public static void main(String[] args) {
 		try (PersonStoreServerSocket server = new PersonStoreServerSocket(ConnectionParameters.getPortNumber())) {
 			server.start();
 		} catch (IOException e) {

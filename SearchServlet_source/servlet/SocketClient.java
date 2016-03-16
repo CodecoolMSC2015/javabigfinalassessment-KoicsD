@@ -3,6 +3,7 @@ package servlet;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.HashSet;
 import java.util.Set;
 
 import datatypes.Person;
@@ -20,8 +21,9 @@ public class SocketClient implements AutoCloseable {
 
 	// querier:
 	public Set<Person> getPersons(String searchCriteria, SearchType searchType) {
+		Set<Person> persons = new HashSet<Person>();
 		// TODO sending to and receiving from SocketServer here
-		return null;
+		return persons;
 	}
 	
 	// closer:

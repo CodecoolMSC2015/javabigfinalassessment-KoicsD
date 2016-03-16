@@ -26,7 +26,7 @@ public class SearchServlet extends HttpServlet {
 				SearchType searchType = getSearchType(req);
 				String searchCriteria = getSearchCriteria(req);
 				Set<Person> persons = socketClient.getPersons(searchCriteria, searchType);
-				listMatches(writer);
+				listMatches(persons, writer);
 			} catch (IOException e) {  // socket connection
 				reportException(e, writer);
 			}
@@ -50,15 +50,27 @@ public class SearchServlet extends HttpServlet {
 		return req.getParameter("skills");
 	}
 	
-	private void listMatches(PrintWriter writer) {
-		// TODO here to list data to browser
+	private void listMatches(Set<Person> persons, PrintWriter writer) {
+		String title = "Match List";
+		String body = "<h1>List of Persons Found:</h1>\n";
+		if (persons.size() == 0) {
+			body += "<p>No persons found.</p>\n";
+		}
+		else {
+			for (Person person: persons) {
+				body += "<p>" + person.getName() + "</p>\n";
+			}
+		}
+		body += "<p><a href=\"index.html\">back to main page</a></p>\n";
+		writer.print(generateHTML(title, body));
 	}
 	
 	private void reportException(IOException e, PrintWriter writer) {
-		writer.println(generateHTML("IOException Occurred",
-				"<h1>An IOException has Occurred.</h1>"
-				+ "<p>Type: " + e.getClass().getName() + "</p>"
-				+ "<p>Message: " + e.getMessage() + "</p>"));
+		writer.print(generateHTML("IOException Occurred",
+				"<h1>An IOException has Occurred.</h1>\n"
+				+ "<p>Type: " + e.getClass().getName() + "</p>\n"
+				+ "<p>Message: " + e.getMessage() + "</p>\n"
+				+ "<p><a href=\"index.html\">back to main page</a></p>\n"));
 	}
 	
 	private String generateHTML(String title, String body) {
