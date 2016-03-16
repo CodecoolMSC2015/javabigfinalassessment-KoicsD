@@ -55,7 +55,10 @@ public class SearchServlet extends HttpServlet {
 	}
 	
 	private void reportException(IOException e, PrintWriter writer) {
-		// TODO here to sign IOException occurred
+		writer.println(generateHTML("IOException Occurred",
+				"<h1>An IOException has Occurred.</h1>"
+				+ "<p>Type: " + e.getClass().getName() + "</p>"
+				+ "<p>Message: " + e.getMessage() + "</p>"));
 	}
 	
 	private String generateHTML(String title, String body) {
