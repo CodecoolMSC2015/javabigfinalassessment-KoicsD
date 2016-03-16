@@ -50,7 +50,7 @@ public class PersonStoreServerSocket implements AutoCloseable {
 	
 	public static void main() {
 		try (PersonStoreServerSocket server = new PersonStoreServerSocket(ConnectionParameters.getPortNumber())) {
-			
+			server.start();
 		} catch (IOException e) {
 			// Auto-generated catch block
 			e.printStackTrace();
