@@ -1,10 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<title>CC HR WebApp</title>
 </head>
 <body>
-
+	<h1>Welcome to the Labour Hire Web-application of CodeCool HR!</h1>
+	<form action="getpersons.html" method="post">
+		<p>
+			<label for="type">Search-type: </label><br/>
+			<input type="radio" name="type" value="mandatory" checked>mandatory<br/>
+			<input type="radio" name="type" value="optional">optional
+		</p>
+		<p>
+			<label for="skills">Skills (separated by semicolon): </label>
+			<br/>
+			<textarea name="skills" rows="25" cols="100" placeholder="javascript;TFS;HTML" ></textarea>
+		</p>
+		<p>
+			<input type="submit" value="Search">
+		</p>
+	</form>
 </body>
 </html>
