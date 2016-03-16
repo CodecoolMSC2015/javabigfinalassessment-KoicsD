@@ -43,13 +43,8 @@ public class PersonStoreServerSocket implements AutoCloseable {
 	
 	// closer:
 	@Override
-	public void close(){
-		try {
-			serverSocket.close();
-		} catch (IOException e) {
-			// Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void close() throws IOException{
+		serverSocket.close();
 	}
 	
 	public static void main() {
