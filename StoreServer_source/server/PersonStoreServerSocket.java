@@ -1,6 +1,8 @@
 package server;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -11,9 +13,14 @@ public class PersonStoreServerSocket implements AutoCloseable {
 	// some settings as static constants:
 	private static final String CSV_FILE_PATH = "persons.csv";
 
-	// instance variables:
+	// server-related instance variables:
 	private ServerSocket serverSocket;
 	private DataReader store;
+	
+	// client-related instance variables: -- how about moving them to a separate class?
+	private Socket socket = null;
+	private ObjectOutputStream oOS = null;
+	private ObjectInputStream oIS = null;
 	
 	// constructor:
 	public PersonStoreServerSocket(int port) throws IOException {
@@ -23,13 +30,22 @@ public class PersonStoreServerSocket implements AutoCloseable {
 	
 	// engine:
 	public void start() {
-		try (Socket socket = serverSocket.accept()) {
+		try (	Socket socket = serverSocket.accept();
+				ObjectOutputStream oOS = new ObjectOutputStream(socket.getOutputStream());
+				ObjectInputStream oIS = new ObjectInputStream(socket.getInputStream())) {
+			this.socket = socket;
+			this.oOS = oOS;
+			this.oIS = oIS;
 			while (true) {
 				receive();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-		} 
+		} finally {
+			this.oIS = null;
+			this.oOS = null;
+			this.socket = null;
+		}
 	}
 	
 	// receiver:
@@ -38,7 +54,7 @@ public class PersonStoreServerSocket implements AutoCloseable {
 	}
 	
 	// sender:
-	private void send(){
+	private void send() {
 		// TODO sender code comes here
 	}
 	
