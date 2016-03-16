@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import connection.ConnectionParameters;
+
 public class SearchServlet extends HttpServlet {
 
 	// POSTer:
@@ -16,7 +18,8 @@ public class SearchServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setContentType("text.html");
 		try (	PrintWriter writer = resp.getWriter();
-				SocketClient socketClient = new SocketClient("localhost", 9999)) {
+				SocketClient socketClient = new SocketClient(	getInitParameter("host"),
+																ConnectionParameters.getPortNumber())) {
 			// TODO here to process request, invoke socketClient.getPersons and compose response
 		} catch (IOException e) {
 			// TODO handle IOException 

@@ -4,10 +4,11 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import connection.ConnectionParameters;
+
 public class PersonStoreServerSocket implements AutoCloseable {
 	
 	// some settings as static constants:
-	private static final int PORT = 9999;
 	private static final String CSV_FILE_PATH = "persons.csv";
 
 	// instance variables:
@@ -48,7 +49,7 @@ public class PersonStoreServerSocket implements AutoCloseable {
 	}
 	
 	public static void main() {
-		try (PersonStoreServerSocket server = new PersonStoreServerSocket(PORT)) {
+		try (PersonStoreServerSocket server = new PersonStoreServerSocket(ConnectionParameters.getPortNumber())) {
 			
 		} catch (IOException e) {
 			// Auto-generated catch block
