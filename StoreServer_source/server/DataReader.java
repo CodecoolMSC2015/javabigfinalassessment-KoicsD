@@ -1,5 +1,6 @@
 package server;
 
+import java.io.IOException;
 import java.util.Set;
 
 import datatypes.Person;
@@ -38,10 +39,10 @@ public abstract class DataReader {
 	}
 	
 	// abstract of searcher:
-	Set<Person> getPersons() {
+	Set<Person> getPersons() throws IOException {
 		return getPersons(searchCriteria, searchType);
 	}
 	
-	abstract Set<Person> getPersons(String searchCriteria, SearchType searchType);
+	abstract Set<Person> getPersons(String searchCriteria, SearchType searchType) throws IOException;
 
 }
