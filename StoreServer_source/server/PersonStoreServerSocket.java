@@ -1,61 +1,62 @@
 package server;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
-import java.net.Socket;
 
 import connection.ConnectionParameters;
 
 public class PersonStoreServerSocket implements AutoCloseable {
 	
 	// some settings as static constants:
+	private static final int PORT_NUMBER = ConnectionParameters.getPortNumber();
 	private static final String CSV_FILE_PATH = "persons.csv";
 
 	// server-related instance variables:
 	private ServerSocket serverSocket;
 	private DataReader store;
-	
-	// client-related instance variables: -- how about moving them to a separate class?
-	private Socket socket = null;
-	private ObjectOutputStream oOS = null;
-	private ObjectInputStream oIS = null;
+	private StoreServerClientConnection connection = null;
+	private boolean running = false;
 	
 	// constructor:
-	public PersonStoreServerSocket(int port) throws IOException {
+	public PersonStoreServerSocket(int port, String csvFilePath) throws IOException {
 		serverSocket = new ServerSocket(port);
-		store = new CSVDataReader(CSV_FILE_PATH);
+		store = new CSVDataReader(csvFilePath);
+	}
+	
+	public ServerSocket getServerSocket() {
+		return serverSocket;
+	}
+	
+	public DataReader getStore() {
+		return store;
+	}
+	
+	public boolean isRunning() {
+		return running;
+	}
+	
+	public StoreServerClientConnection getConnection() {
+		return connection;
 	}
 	
 	// engine:
 	public void start() {
-		try (	Socket socket = serverSocket.accept();
-				ObjectOutputStream oOS = new ObjectOutputStream(socket.getOutputStream());
-				ObjectInputStream oIS = new ObjectInputStream(socket.getInputStream())) {
-			this.socket = socket;
-			this.oOS = oOS;
-			this.oIS = oIS;
-			while (true) {
-				receive();
+		running = true;
+		while (running) {
+			try (StoreServerClientConnection connection = new StoreServerClientConnection(this)) {
+				this.connection = connection;  // let it be instance-level
+				this.connection.start();
+			} catch (IOException e) {
+				running = false;
+				e.printStackTrace();
+			} finally {
+				this.connection = null;  // clear it from instance scope
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			this.oIS = null;
-			this.oOS = null;
-			this.socket = null;
 		}
 	}
 	
-	// receiver:
-	private void receive() {
-		// TODO receiver code comes here
-	}
-	
-	// sender:
-	private void send() {
-		// TODO sender code comes here
+	public void stop() {
+		running = false;
 	}
 	
 	// closer:
@@ -65,10 +66,9 @@ public class PersonStoreServerSocket implements AutoCloseable {
 	}
 	
 	public static void main(String[] args) {
-		try (PersonStoreServerSocket server = new PersonStoreServerSocket(ConnectionParameters.getPortNumber())) {
+		try (PersonStoreServerSocket server = new PersonStoreServerSocket(	PORT_NUMBER, CSV_FILE_PATH)) {
 			server.start();
 		} catch (IOException e) {
-			// Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
