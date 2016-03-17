@@ -27,7 +27,8 @@ public class SearchServlet extends HttpServlet {
 				String searchCriteria = getSearchCriteria(req);
 				Set<Person> persons = socketClient.getPersons(searchCriteria, searchType);
 				listMatches(persons, writer);
-			} catch (IOException e) {  // socket connection
+			} catch (IOException | ClassNotFoundException | ClassCastException e) {  // socket connection
+				e.printStackTrace();
 				reportException(e, writer);
 			}
 		}  // if something is wrong with PrintWriter, I don't want to deal with it, let TomCat catch the exception
@@ -65,7 +66,7 @@ public class SearchServlet extends HttpServlet {
 		writer.print(generateHTML(title, body));
 	}
 	
-	private void reportException(IOException e, PrintWriter writer) {
+	private void reportException(Exception e, PrintWriter writer) {
 		writer.print(generateHTML("IOException Occurred",
 				"<h1>An IOException has Occurred.</h1>\n"
 				+ "<p>Type: " + e.getClass().getName() + "</p>\n"

@@ -1,5 +1,6 @@
 package server;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -26,8 +27,9 @@ public class CSVDataReader extends DataReader {
 	// searcher:
 	@Override
 	Set<Person> getPersons(String searchCriteria, SearchType searchType) {
+		Set<Person> persons = new HashSet<Person>();
 		// TODO search engine comes here
-		return null;
+		return persons;
 	}
 
 }

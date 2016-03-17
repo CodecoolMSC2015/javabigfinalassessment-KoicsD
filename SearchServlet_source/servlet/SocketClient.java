@@ -1,6 +1,8 @@
 package servlet;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.HashSet;
@@ -20,9 +22,14 @@ public class SocketClient implements AutoCloseable {
 	}
 
 	// querier:
-	public Set<Person> getPersons(String searchCriteria, SearchType searchType) {
-		Set<Person> persons = new HashSet<Person>();
-		// TODO sending to and receiving from SocketServer here
+	public Set<Person> getPersons(String searchCriteria, SearchType searchType) throws IOException, ClassNotFoundException, ClassCastException {
+		Set<Person> persons = null;
+		try (	ObjectOutputStream oOS = new ObjectOutputStream(socket.getOutputStream());
+				ObjectInputStream oIS = new ObjectInputStream(socket.getInputStream())) {
+			oOS.writeObject(searchType);
+			oOS.writeObject(searchCriteria);
+			persons = (Set<Person>)oIS.readObject();
+		}
 		return persons;
 	}
 	
