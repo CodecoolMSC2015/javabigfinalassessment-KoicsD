@@ -9,7 +9,7 @@ public class PersonStoreServerSocket implements AutoCloseable {
 	
 	// some settings as static constants:
 	private static final int PORT_NUMBER = ConnectionParameters.getPortNumber();
-	private static final String CSV_FILE_PATH = "persons.csv";
+	private static final String CSV_FILE_PATH = "ServerData/persons.csv";
 
 	// server-related instance variables:
 	private ServerSocket serverSocket;

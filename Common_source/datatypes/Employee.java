@@ -6,6 +6,15 @@ public class Employee extends Person {
 	private int salary;
 	private String jobTitle;
 	
+	public Employee() {
+		super();
+	}
+	
+	public Employee(String name, String email, int salary) {
+		super(name, email);
+		this.salary = salary;
+	}
+	
 	// getters and setters:
 	public int getSalary() {
 		return salary;
