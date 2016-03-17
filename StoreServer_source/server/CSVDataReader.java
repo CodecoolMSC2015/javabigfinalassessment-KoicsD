@@ -25,7 +25,7 @@ public class CSVDataReader extends DataReader {
 	// instance variables:
 	private String csvFilePath;
 	private List<Person> persons;
-	private boolean fileParsed = false;
+	private boolean fileParsed = false;  // how about using a date-stamp instead of boolean? Parse only if not up-to-date.
 	
 	// constructors:
 	public CSVDataReader(String csvFilePath) {
@@ -44,8 +44,34 @@ public class CSVDataReader extends DataReader {
 		List<Person> matches = new ArrayList<Person>();
 		if (!fileParsed)
 			parseFile();
-		// TODO search engine comes here
+		Set<Skill> criteriaSkillSet = convertCriteriaToSet(searchCriteria);
+		for (Person person: persons) {
+			switch (searchType) {
+			case MANDATORY:
+				if (new HashSet<>(person.getSkillset()).containsAll(criteriaSkillSet))
+					matches.add(person);
+				break;
+			case OPTIONAL:
+				if (isThereAnyCommonElement(criteriaSkillSet, new HashSet<Skill>(person.getSkillset())))
+					matches.add(person);
+				break;
+			}
+		}
 		return new HashSet<Person>(matches);
+	}
+	
+	private boolean isThereAnyCommonElement(Set<Skill>a, Set<Skill> b) {
+		Set<Skill> c = new HashSet<Skill>(a);
+		c.retainAll(b);
+		return (c.size() > 0);
+	}
+	
+	private Set<Skill> convertCriteriaToSet(String searchCriteria) {
+		Set<Skill> criteriaSet = new HashSet<Skill>();
+		for (String criterium: searchCriteria.split(";")) {
+			criteriaSet.add(new Skill(criterium, "", 0));
+		}
+		return criteriaSet;
 	}
 	
 	private void parseFile() throws IOException {
