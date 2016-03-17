@@ -61,8 +61,8 @@ public class CSVDataReader extends DataReader {
 				String email;
 				String skill;
 				String skillDescription;
-				String skillRate;
-				String salary;
+				String skillRate = null;
+				String salary = null;
 				Person currentPerson;
 				Skill currentSkill;
 				int i;
@@ -78,7 +78,7 @@ public class CSVDataReader extends DataReader {
 						}
 						skill = reader.get("Skill");
 						skillDescription = reader.get("SkillDescription");
-						skillRate = reader.get("skillRate");
+						skillRate = reader.get("SkillRate");
 						currentSkill = new Skill(skill,skillDescription, Double.valueOf(skillRate));
 						if (persons.contains(currentPerson)) {
 							i = persons.indexOf(currentPerson);
@@ -93,8 +93,15 @@ public class CSVDataReader extends DataReader {
 						System.err.println("File: " + new File(csvFilePath).getAbsolutePath());
 						System.err.println("Line number: " + line);
 						System.err.println("Line content: " + reader.getRawRecord());
-						System.err.println("Stack-trace:");
-						e.printStackTrace();
+						if (salary != null)
+							System.err.println("Salary as String: " + salary);
+						if (skillRate != null)
+							System.err.println("SkillRate as String: " + skillRate);
+						if (e.getMessage() != null)
+							System.err.println("Message: " + e.getMessage());
+					} finally {
+						salary = null;
+						skillRate = null;
 					}
 				}
 			}
