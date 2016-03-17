@@ -52,6 +52,7 @@ public class SearchServlet extends HttpServlet {
 	}
 	
 	private void listMatches(Set<Person> persons, PrintWriter writer) {
+		// TODO order has to fit acceptance criteria
 		String title = "Match List";
 		String body = "<h1>List of Persons Found:</h1>\n";
 		if (persons.size() == 0) {
