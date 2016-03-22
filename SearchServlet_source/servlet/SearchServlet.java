@@ -2,7 +2,7 @@ package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Set;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,7 +25,7 @@ public class SearchServlet extends HttpServlet {
 																ConnectionParameters.getPortNumber())) {
 				SearchType searchType = getSearchType(req);
 				String searchCriteria = getSearchCriteria(req);
-				Set<Person> persons = socketClient.getPersons(searchCriteria, searchType);
+				List<Person> persons = socketClient.getPersons(searchCriteria, searchType);
 				listMatches(persons, writer);
 			} catch (IOException | ClassNotFoundException | ClassCastException e) {  // socket connection
 				e.printStackTrace();
@@ -51,7 +51,7 @@ public class SearchServlet extends HttpServlet {
 		return req.getParameter("skills");
 	}
 	
-	private void listMatches(Set<Person> persons, PrintWriter writer) {
+	private void listMatches(List<Person> persons, PrintWriter writer) {
 		// TODO order has to fit acceptance criteria
 		String title = "Match List";
 		String body = "<h1>List of Persons Found:</h1>\n";

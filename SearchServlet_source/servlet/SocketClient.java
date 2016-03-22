@@ -5,7 +5,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import datatypes.Person;
@@ -22,7 +23,7 @@ public class SocketClient implements AutoCloseable {
 	}
 
 	// querier:
-	public Set<Person> getPersons(String searchCriteria, SearchType searchType) throws IOException, ClassNotFoundException, ClassCastException {
+	public List<Person> getPersons(String searchCriteria, SearchType searchType) throws IOException, ClassNotFoundException, ClassCastException {
 		Set<Person> persons = null;
 		try (	ObjectOutputStream oOS = new ObjectOutputStream(socket.getOutputStream());
 				ObjectInputStream oIS = new ObjectInputStream(socket.getInputStream())) {
@@ -30,7 +31,7 @@ public class SocketClient implements AutoCloseable {
 			oOS.writeObject(searchCriteria);
 			persons = (Set<Person>)oIS.readObject();
 		}
-		return persons;
+		return new ArrayList<Person>(persons);
 	}
 	
 	// closer:
