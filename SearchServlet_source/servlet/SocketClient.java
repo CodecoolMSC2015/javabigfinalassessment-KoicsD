@@ -14,7 +14,10 @@ import searching.SearchType;
 
 public class SocketClient implements AutoCloseable {
 
-	// instance variables:
+	// enumeration-type for creating order:
+	public static enum OrderType { MAX, AVG }
+	
+	// the only instance variable:
 	private Socket socket;
 	
 	// constructor:
@@ -31,7 +34,18 @@ public class SocketClient implements AutoCloseable {
 			oOS.writeObject(searchCriteria);
 			persons = (Set<Person>)oIS.readObject();
 		}
-		return new ArrayList<Person>(persons);
+		switch (searchType) {
+		case MANDATORY:
+			return orderPersons(persons, OrderType.AVG);
+		case OPTIONAL:
+			return orderPersons(persons, OrderType.MAX);
+		}
+		return null;  // to make compiler calm
+	}
+	
+	public static List<Person> orderPersons(Set<Person> setOfPersons, OrderType orderBy) {
+		// TODO here to convert Set to List, making an order
+		return new ArrayList<Person>(setOfPersons);
 	}
 	
 	// closer:

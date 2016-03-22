@@ -26,7 +26,7 @@ public class SearchServlet extends HttpServlet {
 				SearchType searchType = getSearchType(req);
 				String searchCriteria = getSearchCriteria(req);
 				List<Person> persons = socketClient.getPersons(searchCriteria, searchType);
-				listMatches(persons, writer);
+				printMatchesAsHtml(persons, writer);
 			} catch (IOException | ClassNotFoundException | ClassCastException e) {  // socket connection
 				e.printStackTrace();
 				reportException(e, writer);
@@ -51,8 +51,8 @@ public class SearchServlet extends HttpServlet {
 		return req.getParameter("skills");
 	}
 	
-	private void listMatches(List<Person> persons, PrintWriter writer) {
-		// TODO order has to fit acceptance criteria
+	private void printMatchesAsHtml(List<Person> persons, PrintWriter writer) {
+		// TODO a more sophisticated lister is necessary
 		String title = "Match List";
 		String body = "<h1>List of Persons Found:</h1>\n";
 		if (persons.size() == 0) {
@@ -65,6 +65,7 @@ public class SearchServlet extends HttpServlet {
 		}
 		body += "<p><a href=\"index.html\">back to main page</a></p>\n";
 		writer.print(generateHTML(title, body));
+		writer.flush();
 	}
 	
 	private void reportException(Exception e, PrintWriter writer) {
