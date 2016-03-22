@@ -65,9 +65,15 @@ public class PersonStoreServerSocket implements AutoCloseable {
 		serverSocket.close();
 	}
 	
-	public static void main(String[] args) {
-		try (PersonStoreServerSocket server = new PersonStoreServerSocket(	PORT_NUMBER, CSV_FILE_PATH)) {
+	public static void setupAt(int portNumber, String csvFilePath) throws IOException {
+		try (PersonStoreServerSocket server = new PersonStoreServerSocket(portNumber, csvFilePath)) {
 			server.start();
+		}
+	}
+	
+	public static void main(String[] args) {
+		try {
+			setupAt(PORT_NUMBER, CSV_FILE_PATH);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
