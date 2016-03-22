@@ -69,7 +69,7 @@ public class SearchServlet extends HttpServlet {
 	
 	private void reportException(Exception e, PrintWriter writer) {
 		writer.print(generateHTML("IOException Occurred",
-				"<h1>An IOException has Occurred.</h1>\n"
+				"<h1>An Exception has Occurred.</h1>\n"
 				+ "<p>Type: " + e.getClass().getName() + "</p>\n"
 				+ "<p>Message: " + e.getMessage() + "</p>\n"
 				+ "<p><a href=\"index.html\">back to main page</a></p>\n"));
