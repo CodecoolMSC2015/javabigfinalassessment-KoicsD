@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import tools.htmlCompatible;
+import tools.HtmlCompatible;
 
-public class Person implements Serializable, htmlCompatible {
+public class Person implements Serializable, HtmlCompatible {
 
 	// instance variables:
 	private String name;

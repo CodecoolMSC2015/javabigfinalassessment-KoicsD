@@ -2,9 +2,9 @@ package datatypes;
 
 import java.io.Serializable;
 
-import tools.htmlCompatible;
+import tools.HtmlCompatible;
 
-public class Skill implements Serializable, htmlCompatible {
+public class Skill implements Serializable, HtmlCompatible {
 	
 	// instance variables:
 	private String name;

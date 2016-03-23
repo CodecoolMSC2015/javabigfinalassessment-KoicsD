@@ -1,5 +1,5 @@
 package tools;
 
-public interface htmlCompatible {
+public interface HtmlCompatible {
 	public String toHtmlString();
 }
