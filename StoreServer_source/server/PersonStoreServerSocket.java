@@ -3,7 +3,7 @@ package server;
 import java.io.IOException;
 import java.net.ServerSocket;
 
-import connection.ConnectionParameters;
+import tools.ConnectionParameters;
 
 public class PersonStoreServerSocket implements AutoCloseable {
 	
