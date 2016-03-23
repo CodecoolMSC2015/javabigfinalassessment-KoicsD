@@ -25,7 +25,7 @@ public class CSVDataReader extends DataReader {
 	// instance variables:
 	private String csvFilePath;
 	private List<Person> persons;
-	private boolean fileParsed = false;  // how about using a date-stamp instead of boolean? Parse only if not up-to-date.
+	private boolean fileParsed = false;  // TODO how about using a date-stamp instead of boolean? Parse only if not up-to-date.
 	
 	// constructors:
 	public CSVDataReader(String csvFilePath) {
