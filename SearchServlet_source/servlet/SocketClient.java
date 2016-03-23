@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -44,8 +45,34 @@ public class SocketClient implements AutoCloseable {
 	}
 	
 	public static List<Person> orderPersons(Set<Person> setOfPersons, OrderType orderBy) {
-		// TODO here to convert Set to List, making an order
-		return new ArrayList<Person>(setOfPersons);
+		List<Person> listOfPersons = new ArrayList<Person>(setOfPersons);
+		switch (orderBy) {
+		case MAX:
+			listOfPersons.sort(new Comparator<Person>(){
+				@Override
+				public int compare(Person o1, Person o2) {
+					if (o1.getMaxSkillRate() > o2.getMaxSkillRate())
+						return -1;
+					if (o1.getMaxSkillRate() < o2.getMaxSkillRate())
+						return 1;
+					return 0;
+				}
+			});
+			break;
+		case AVG:
+			listOfPersons.sort(new Comparator<Person>(){
+				@Override
+				public int compare(Person o1, Person o2) {
+					if (o1.getAverageSkillRate() > o2.getAverageSkillRate())
+						return -1;
+					if (o1.getAverageSkillRate() < o2.getAverageSkillRate())
+						return 1;
+					return 0;
+				}
+			});
+			break;
+		}
+		return listOfPersons;
 	}
 	
 	// closer:

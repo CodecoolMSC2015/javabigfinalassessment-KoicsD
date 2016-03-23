@@ -54,6 +54,36 @@ public class Person implements Serializable, htmlCompatible {
 		// TODO: what if (skillset == null) ?
 		skillset.add(skill);
 	}
+	
+	public double getMaxSkillRate() {
+		double maxSkillRate = 0;
+		boolean first = true;
+		for (Skill skill: skillset) {
+			if (first) {
+				maxSkillRate = skill.getRate();
+				first = false;
+			} else if (skill.getRate() > maxSkillRate) {
+				maxSkillRate = skill.getRate();
+			}
+		}
+		return maxSkillRate;
+	}
+	
+	public double getAverageSkillRate() {
+		return getTotalSkillRate() / getNumberOfSkills();
+	}
+	
+	public int getNumberOfSkills() {
+		return skillset.size();
+	}
+	
+	public double getTotalSkillRate() {
+		double totalSkillRate = 0;
+		for (Skill skill: skillset) {
+			totalSkillRate += skill.getRate();
+		}
+		return totalSkillRate;
+	}
 
 	@Override
 	public int hashCode() {
