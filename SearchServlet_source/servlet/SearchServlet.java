@@ -52,7 +52,6 @@ public class SearchServlet extends HttpServlet {
 	}
 	
 	private void printMatchesAsHtml(List<Person> persons, PrintWriter writer) {
-		// TODO a more sophisticated lister is necessary
 		String title = "Match List";
 		String body = "<h1>List of Persons Found:</h1>\n";
 		if (persons.size() == 0) {

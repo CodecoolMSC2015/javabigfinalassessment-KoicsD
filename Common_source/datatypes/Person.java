@@ -88,7 +88,7 @@ public class Person implements Serializable, htmlCompatible {
 
 	@Override
 	public String toHtmlString() {
-		String asHtml = getName();
+		String asHtml = getName() + "<br/>";
 		asHtml += "&nbsp;&nbsp;Email: " + getEmail() + "<br/>";
 		if (!getSkillset().isEmpty()) {
 			asHtml += "&nbsp;&nbsp;Skills:<br/>";

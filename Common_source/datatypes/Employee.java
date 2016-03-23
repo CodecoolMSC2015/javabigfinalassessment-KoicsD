@@ -34,9 +34,9 @@ public class Employee extends Person {
 
 	@Override
 	public String toHtmlString() {
-		String asHtml = getName();
+		String asHtml = getName() + "<br/>";
 		asHtml += "&nbsp;&nbsp;Email: " + getEmail() + "<br/>";
-		asHtml += "&nbsp;&nbsp;Email: " + getSalary() + "<br/>";
+		asHtml += "&nbsp;&nbsp;Salary: " + getSalary() + "<br/>";
 		if (!getSkillset().isEmpty()) {
 			asHtml += "&nbsp;&nbsp;Skills:<br/>";
 			for (Skill skill: getSkillset()) {
