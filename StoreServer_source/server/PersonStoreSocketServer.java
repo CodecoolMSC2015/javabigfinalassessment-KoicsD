@@ -14,7 +14,7 @@ public class PersonStoreSocketServer implements AutoCloseable {
 	// server-related instance variables:
 	private ServerSocket serverSocket;
 	private DataReader store;
-	private StoreServerClientConnection connection = null;
+	private SocketSession connection = null;
 	private boolean running = false;
 	
 	// constructor:
@@ -35,7 +35,7 @@ public class PersonStoreSocketServer implements AutoCloseable {
 		return running;
 	}
 	
-	public StoreServerClientConnection getConnection() {
+	public SocketSession getConnection() {
 		return connection;
 	}
 	
@@ -43,7 +43,7 @@ public class PersonStoreSocketServer implements AutoCloseable {
 	public void start() {
 		running = true;
 		while (running) {
-			try (StoreServerClientConnection connection = new StoreServerClientConnection(this)) {
+			try (SocketSession connection = new SocketSession(this)) {
 				this.connection = connection;  // let it be instance-level
 				this.connection.start();
 			} catch (IOException e) {

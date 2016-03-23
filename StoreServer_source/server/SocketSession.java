@@ -8,7 +8,7 @@ import java.net.Socket;
 
 import searching.SearchType;
 
-public class StoreServerClientConnection implements AutoCloseable {
+public class SocketSession implements AutoCloseable {
 
 	// instance variables:
 	private DataReader store;
@@ -22,7 +22,7 @@ public class StoreServerClientConnection implements AutoCloseable {
 	private SearchType searchType = null;
 	
 	// constructor:
-	public StoreServerClientConnection(PersonStoreSocketServer parent) throws IOException {
+	public SocketSession(PersonStoreSocketServer parent) throws IOException {
 		socket = parent.getServerSocket().accept();
 		store = parent.getStore();
 	}
