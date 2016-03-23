@@ -30,7 +30,7 @@ public class SearchServlet extends HttpServlet {
 			try {
 				List<Person> persons = getPersons(searchCriteria, searchType, req.getSession());  // socket connection here
 				printMatchesAsHtml(persons, writer);
-			} catch (IOException | ClassNotFoundException | ClassCastException e) {  // socket connection
+			} catch (IOException | ClassNotFoundException | ClassCastException e) {  // socket-related exceptions
 				e.printStackTrace();
 				reportException(e, writer);
 			}
@@ -48,7 +48,7 @@ public class SearchServlet extends HttpServlet {
 		}
 	}
 	
-	// private assistant functions:
+	// regaining data from User:
 	private SearchType getSearchType(HttpServletRequest req) {
 		SearchType searchType = SearchType.MANDATORY; // a default value is necessary for compilation
 		switch (req.getParameter("type")) {
@@ -66,9 +66,10 @@ public class SearchServlet extends HttpServlet {
 		return req.getParameter("skills");
 	}
 	
+	// intelligent searcher, asks SocketServer only if necessary:
 	private List<Person> getPersons(String searchCriteria, SearchType searchType, HttpSession session) throws IOException, ClassNotFoundException, ClassCastException {
 		if (session.getAttribute("searchHistory") == null) {
-			session.setAttribute("searchHistory", new HashMap<SearchParameters, List<Person>>());
+			session.setAttribute("searchHistory", new HashMap<SearchParameters, List<Person>>());  // TODO not serializable! TomCat gets angry when shutting down.
 		}
 		Map<SearchParameters, List<Person>> searchHistory = (Map<SearchParameters, List<Person>>)session.getAttribute("searchHistory");
 		SearchParameters parameters = new SearchParameters(searchCriteria, searchType);
@@ -82,6 +83,7 @@ public class SearchServlet extends HttpServlet {
 		}
 	}
 	
+	// match-list printer:
 	private void printMatchesAsHtml(List<Person> persons, PrintWriter writer) {
 		String title = "Match List";
 		String body = "<h1>List of Persons Found:</h1>\n";
@@ -98,6 +100,7 @@ public class SearchServlet extends HttpServlet {
 		writer.flush();
 	}
 	
+	// error-reporter for socket-related exceptions:
 	private void reportException(Exception e, PrintWriter writer) {
 		writer.print(generateHTML("IOException Occurred",
 				"<h1>An Exception has Occurred.</h1>\n"
@@ -106,6 +109,7 @@ public class SearchServlet extends HttpServlet {
 				+ "<p><a href=\"index.html\">back to main page</a></p>\n"));
 	}
 	
+	// assistant function for html formula:
 	private String generateHTML(String title, String body) {
 		return "<html>\n"
 				+ "<head>\n"
