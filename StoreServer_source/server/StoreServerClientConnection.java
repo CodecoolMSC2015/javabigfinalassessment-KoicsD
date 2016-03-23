@@ -22,7 +22,7 @@ public class StoreServerClientConnection implements AutoCloseable {
 	private SearchType searchType = null;
 	
 	// constructor:
-	public StoreServerClientConnection(PersonStoreServerSocket parent) throws IOException {
+	public StoreServerClientConnection(PersonStoreSocketServer parent) throws IOException {
 		socket = parent.getServerSocket().accept();
 		store = parent.getStore();
 	}

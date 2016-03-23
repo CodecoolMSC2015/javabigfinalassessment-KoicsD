@@ -5,7 +5,7 @@ import java.net.ServerSocket;
 
 import tools.ConnectionParameters;
 
-public class PersonStoreServerSocket implements AutoCloseable {
+public class PersonStoreSocketServer implements AutoCloseable {
 	
 	// some settings as static constants:
 	private static final int PORT_NUMBER = ConnectionParameters.getPortNumber();
@@ -18,7 +18,7 @@ public class PersonStoreServerSocket implements AutoCloseable {
 	private boolean running = false;
 	
 	// constructor:
-	public PersonStoreServerSocket(int port, String csvFilePath) throws IOException {
+	public PersonStoreSocketServer(int port, String csvFilePath) throws IOException {
 		serverSocket = new ServerSocket(port);
 		store = new CSVDataReader(csvFilePath);
 	}
@@ -66,7 +66,7 @@ public class PersonStoreServerSocket implements AutoCloseable {
 	}
 	
 	public static void setupAt(int portNumber, String csvFilePath) throws IOException {
-		try (PersonStoreServerSocket server = new PersonStoreServerSocket(portNumber, csvFilePath)) {
+		try (PersonStoreSocketServer server = new PersonStoreSocketServer(portNumber, csvFilePath)) {
 			server.start();
 		}
 	}
