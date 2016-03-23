@@ -16,7 +16,7 @@ import searching.SearchType;
 public class SocketClient implements AutoCloseable {
 
 	// enumeration-type for creating order:
-	public static enum OrderType { MAX, AVG }
+	private static enum OrderType { MAX, AVG }
 	
 	// the only instance variable:
 	private Socket socket;
@@ -44,7 +44,8 @@ public class SocketClient implements AutoCloseable {
 		return null;  // to make compiler calm
 	}
 	
-	public static List<Person> orderPersons(Set<Person> setOfPersons, OrderType orderBy) {
+	// private assistant function to make an ordered list:
+	private static List<Person> orderPersons(Set<Person> setOfPersons, OrderType orderBy) {
 		List<Person> listOfPersons = new ArrayList<Person>(setOfPersons);
 		switch (orderBy) {
 		case MAX:

@@ -34,6 +34,7 @@ public class SearchServlet extends HttpServlet {
 		}  // if something is wrong with PrintWriter, I don't want to deal with it, let TomCat catch the exception
 	}
 	
+	// private assistant functions:
 	private SearchType getSearchType(HttpServletRequest req) {
 		SearchType searchType = SearchType.MANDATORY; // a default value is necessary for compilation
 		switch (req.getParameter("type")) {
