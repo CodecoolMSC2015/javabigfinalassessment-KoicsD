@@ -2,14 +2,18 @@ package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import datatypes.Person;
+import searching.SearchParameters;
 import searching.SearchType;
 import tools.ConnectionParameters;
 
@@ -24,7 +28,7 @@ public class SearchServlet extends HttpServlet {
 			SearchType searchType = getSearchType(req);
 			String searchCriteria = getSearchCriteria(req);
 			try {
-				List<Person> persons = getPersons(searchCriteria, searchType);  // socket connection here
+				List<Person> persons = getPersons(searchCriteria, searchType, req.getSession());  // socket connection here
 				printMatchesAsHtml(persons, writer);
 			} catch (IOException | ClassNotFoundException | ClassCastException e) {  // socket connection
 				e.printStackTrace();
@@ -62,11 +66,19 @@ public class SearchServlet extends HttpServlet {
 		return req.getParameter("skills");
 	}
 	
-	private List<Person> getPersons(String searchCriteria, SearchType searchType) throws IOException, ClassNotFoundException, ClassCastException {
-		// TODO logic to decide if SocketServer has to be asked
+	private List<Person> getPersons(String searchCriteria, SearchType searchType, HttpSession session) throws IOException, ClassNotFoundException, ClassCastException {
+		if (session.getAttribute("searchHistory") == null) {
+			session.setAttribute("searchHistory", new HashMap<SearchParameters, List<Person>>());
+		}
+		Map<SearchParameters, List<Person>> searchHistory = (Map<SearchParameters, List<Person>>)session.getAttribute("searchHistory");
+		SearchParameters parameters = new SearchParameters(searchCriteria, searchType);
+		if (searchHistory.containsKey(parameters))
+			return searchHistory.get(parameters);
 		try (SocketClient socketClient = new SocketClient(	getInitParameter("host"),  // socket connection auto close
 				ConnectionParameters.getPortNumber())) {
-			return socketClient.getPersons(searchCriteria, searchType);
+			List<Person> personsReceived = socketClient.getPersons(searchCriteria, searchType);
+			searchHistory.put(parameters, personsReceived);
+			return personsReceived;
 		}
 	}
 	
