@@ -21,11 +21,10 @@ public class SearchServlet extends HttpServlet {
 		resp.setCharacterEncoding("UTF-8");
 		resp.setContentType("text/html");
 		try (PrintWriter writer = resp.getWriter()) {  // PrintWrinter auto close
-			try (SocketClient socketClient = new SocketClient(	getInitParameter("host"),  // socket connection
-																ConnectionParameters.getPortNumber())) {
-				SearchType searchType = getSearchType(req);
-				String searchCriteria = getSearchCriteria(req);
-				List<Person> persons = socketClient.getPersons(searchCriteria, searchType);
+			SearchType searchType = getSearchType(req);
+			String searchCriteria = getSearchCriteria(req);
+			try {
+				List<Person> persons = getPersons(searchCriteria, searchType);  // socket connection here
 				printMatchesAsHtml(persons, writer);
 			} catch (IOException | ClassNotFoundException | ClassCastException e) {  // socket connection
 				e.printStackTrace();
@@ -61,6 +60,14 @@ public class SearchServlet extends HttpServlet {
 	
 	private String getSearchCriteria(HttpServletRequest req) {
 		return req.getParameter("skills");
+	}
+	
+	private List<Person> getPersons(String searchCriteria, SearchType searchType) throws IOException, ClassNotFoundException, ClassCastException {
+		// TODO logic to decide if SocketServer has to be asked
+		try (SocketClient socketClient = new SocketClient(	getInitParameter("host"),  // socket connection auto close
+				ConnectionParameters.getPortNumber())) {
+			return socketClient.getPersons(searchCriteria, searchType);
+		}
 	}
 	
 	private void printMatchesAsHtml(List<Person> persons, PrintWriter writer) {
