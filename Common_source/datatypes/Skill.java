@@ -2,7 +2,9 @@ package datatypes;
 
 import java.io.Serializable;
 
-public class Skill implements Serializable {
+import tools.htmlCompatible;
+
+public class Skill implements Serializable, htmlCompatible {
 	
 	// instance variables:
 	private String name;
@@ -53,6 +55,14 @@ public class Skill implements Serializable {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toHtmlString() {
+		String asHtml = getName() + "<br/>";
+		asHtml += "&nbsp;&nbsp;Rate: " + getRate() + "<br/>";
+		asHtml += "&nbsp;&nbsp;Description: " + getDescription() + "<br/>";
+		return asHtml;
 	}
 	
 }

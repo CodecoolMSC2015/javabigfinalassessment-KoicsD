@@ -32,11 +32,18 @@ public class Employee extends Person {
 		this.jobTitle = jobTitle;
 	}
 
-	// to-string converter:
 	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return super.toString();
+	public String toHtmlString() {
+		String asHtml = getName();
+		asHtml += "&nbsp;&nbsp;Email: " + getEmail() + "<br/>";
+		asHtml += "&nbsp;&nbsp;Email: " + getSalary() + "<br/>";
+		if (!getSkillset().isEmpty()) {
+			asHtml += "&nbsp;&nbsp;Skills:<br/>";
+			for (Skill skill: getSkillset()) {
+				asHtml += "&nbsp;&nbsp;&nbsp;&nbsp;" + skill.getName() + "&nbsp;&nbsp;(" + skill.getRate() + ")<br/>";
+			}
+		}
+		return asHtml;
 	}
 	
 }

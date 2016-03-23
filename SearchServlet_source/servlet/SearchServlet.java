@@ -60,7 +60,7 @@ public class SearchServlet extends HttpServlet {
 		}
 		else {
 			for (Person person: persons) {
-				body += "<p>" + person.getName() + "</p>\n";
+				body += "<p>" + person.toHtmlString() + "</p>\n";
 			}
 		}
 		body += "<p><a href=\"index.html\">back to main page</a></p>\n";

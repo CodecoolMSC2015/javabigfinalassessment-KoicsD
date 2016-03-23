@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Person implements Serializable {
+import tools.htmlCompatible;
+
+public class Person implements Serializable, htmlCompatible {
 
 	// instance variables:
 	private String name;
@@ -82,6 +84,19 @@ public class Person implements Serializable {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toHtmlString() {
+		String asHtml = getName();
+		asHtml += "&nbsp;&nbsp;Email: " + getEmail() + "<br/>";
+		if (!getSkillset().isEmpty()) {
+			asHtml += "&nbsp;&nbsp;Skills:<br/>";
+			for (Skill skill: getSkillset()) {
+				asHtml += "&nbsp;&nbsp;&nbsp;&nbsp;" + skill.getName() + "&nbsp;&nbsp;(" + skill.getRate() + ")<br/>";
+			}
+		}
+		return asHtml;
 	}
 	
 }
