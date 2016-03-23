@@ -34,6 +34,17 @@ public class SearchServlet extends HttpServlet {
 		}  // if something is wrong with PrintWriter, I don't want to deal with it, let TomCat catch the exception
 	}
 	
+	// if we use HTTPSession, we have to enable invalidating -- let's do it by GET:
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		resp.setCharacterEncoding("UTF-8");
+		resp.setContentType("text/html");
+		try (PrintWriter writer = resp.getWriter()) {
+			req.getSession().invalidate();
+			writer.print(generateHTML("Session Invalidated", "<h1>Your session has been invalidated.</h1>"));
+		}
+	}
+	
 	// private assistant functions:
 	private SearchType getSearchType(HttpServletRequest req) {
 		SearchType searchType = SearchType.MANDATORY; // a default value is necessary for compilation
