@@ -6,16 +6,16 @@
 </head>
 <body>
 	<h1>Welcome to the Labour Hire Web-application of CodeCool HR!</h1>
-	<form action="getpersons.html" method="post">
+	<form action="get_persons.html" method="post">
 		<p>
-			<label for="type">Search-type: </label><br/>
-			<input type="radio" name="type" value="mandatory" checked>mandatory<br/>
-			<input type="radio" name="type" value="optional">optional
+			<label for="searchType">Search-type: </label><br/>
+			<input type="radio" name="searchType" value="mandatory" checked>mandatory<br/>
+			<input type="radio" name="searchType" value="optional">optional
 		</p>
 		<p>
-			<label for="skills">Skills (separated by semicolon): </label>
+			<label for="searchCriteria">Skills (separated by semicolon): </label>
 			<br/>
-			<textarea name="skills" rows="25" cols="100" placeholder="javascript;TFS;HTML" ></textarea>
+			<textarea name="searchCriteria" rows="25" cols="100" placeholder="javascript;TFS;HTML" ></textarea>
 		</p>
 		<p>
 			<input type="submit" value="Search">

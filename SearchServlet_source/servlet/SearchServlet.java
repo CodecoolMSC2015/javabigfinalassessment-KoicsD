@@ -50,7 +50,7 @@ public class SearchServlet extends HttpServlet {
 	
 	// regaining data from User:
 	private SearchType getSearchType(HttpServletRequest req) throws InvalidFormException {
-		switch (req.getParameter("type")) {
+		switch (req.getParameter("searchType")) {
 		case "mandatory":
 			return SearchType.MANDATORY;
 		case "optional":
@@ -60,7 +60,7 @@ public class SearchServlet extends HttpServlet {
 	}
 	
 	private String getSearchCriteria(HttpServletRequest req) {
-		return req.getParameter("skills");
+		return req.getParameter("searchCriteria");
 	}
 	
 	// intelligent searcher, asks SocketServer only if necessary:
@@ -72,7 +72,7 @@ public class SearchServlet extends HttpServlet {
 		SearchParameters parameters = new SearchParameters(searchCriteria, searchType);
 		if (searchHistory.containsKey(parameters))
 			return searchHistory.get(parameters);
-		try (SocketClient socketClient = new SocketClient(	getInitParameter("host"),  // socket connection auto close
+		try (SocketClient socketClient = new SocketClient(	getInitParameter("storeServerHost"),  // socket connection auto close
 				ConnectionParameters.getPortNumber())) {
 			List<Person> personsReceived = socketClient.getPersons(searchCriteria, searchType);
 			searchHistory.put(parameters, personsReceived);

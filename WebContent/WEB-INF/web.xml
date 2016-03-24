@@ -10,15 +10,15 @@
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
   <servlet>
-    <servlet-name>search for persons</servlet-name>
+    <servlet-name>search_for_persons</servlet-name>
     <servlet-class>servlet.SearchServlet</servlet-class>
     <init-param>
-      <param-name>host</param-name>
+      <param-name>storeServerHost</param-name>
       <param-value>localhost</param-value>
     </init-param>
   </servlet>
   <servlet-mapping>
-    <servlet-name>search for persons</servlet-name>
-    <url-pattern>/getpersons.html</url-pattern>
+    <servlet-name>search_for_persons</servlet-name>
+    <url-pattern>/get_persons.html</url-pattern>
   </servlet-mapping>
 </web-app>
