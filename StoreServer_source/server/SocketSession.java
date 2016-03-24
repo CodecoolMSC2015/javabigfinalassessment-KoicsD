@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import reader.DataReader;
 import searching.SearchType;
 
 public class SocketSession implements AutoCloseable {

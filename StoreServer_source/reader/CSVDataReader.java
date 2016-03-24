@@ -1,4 +1,4 @@
-package server;
+package reader;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +40,7 @@ public class CSVDataReader extends DataReader {
 
 	// searcher:
 	@Override
-	Set<Person> getPersons(String searchCriteria, SearchType searchType) throws IOException {
+	public Set<Person> getPersons(String searchCriteria, SearchType searchType) throws IOException {
 		List<Person> matches = new ArrayList<Person>();
 		if (!fileParsed)
 			parseFile();

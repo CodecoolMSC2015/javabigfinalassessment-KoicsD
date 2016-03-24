@@ -3,6 +3,8 @@ package server;
 import java.io.IOException;
 import java.net.ServerSocket;
 
+import reader.CSVDataReader;
+import reader.DataReader;
 import tools.ConnectionParameters;
 
 public class PersonStoreSocketServer implements AutoCloseable {
