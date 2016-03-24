@@ -25,12 +25,12 @@ public class SearchServlet extends HttpServlet {
 		resp.setCharacterEncoding("UTF-8");
 		resp.setContentType("text/html");
 		try (PrintWriter writer = resp.getWriter()) {  // PrintWrinter auto close
-			SearchType searchType = getSearchType(req);
-			String searchCriteria = getSearchCriteria(req);
 			try {
+				SearchType searchType = getSearchType(req);
+				String searchCriteria = getSearchCriteria(req);
 				List<Person> persons = getPersons(searchCriteria, searchType, req.getSession());  // socket connection here
 				printMatchesAsHtml(persons, writer);
-			} catch (IOException | ClassNotFoundException | ClassCastException e) {  // socket-related exceptions
+			} catch (IOException | ClassNotFoundException | ClassCastException | InvalidFormException e) {  // socket-related exceptions
 				e.printStackTrace();
 				reportException(e, writer);
 			}
@@ -49,17 +49,14 @@ public class SearchServlet extends HttpServlet {
 	}
 	
 	// regaining data from User:
-	private SearchType getSearchType(HttpServletRequest req) {
-		SearchType searchType = SearchType.MANDATORY; // a default value is necessary for compilation
+	private SearchType getSearchType(HttpServletRequest req) throws InvalidFormException {
 		switch (req.getParameter("type")) {
 		case "mandatory":
-			searchType = SearchType.MANDATORY;
-			break;
+			return SearchType.MANDATORY;
 		case "optional":
-			searchType = SearchType.OPTIONAL;
-			break;
+			return SearchType.OPTIONAL;
 		}
-		return searchType;
+		throw new InvalidFormException("The form you have filled is invalid.");
 	}
 	
 	private String getSearchCriteria(HttpServletRequest req) {
