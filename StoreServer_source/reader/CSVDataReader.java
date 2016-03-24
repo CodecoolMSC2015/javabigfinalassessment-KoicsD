@@ -41,35 +41,45 @@ public class CSVDataReader extends DataReader {
 	// searcher:
 	@Override
 	public Set<Person> getPersons(String searchCriteria, SearchType searchType) throws IOException {
-		List<Person> matches = new ArrayList<Person>();
+		Set<Person> matches = new HashSet<Person>();
 		if (!fileParsed)
 			parseFile();
-		Set<Skill> criteriaSkillSet = convertCriteriaToSet(searchCriteria);
+		Set<String> skillNames = convertCriteriaToSet(searchCriteria);
 		for (Person person: persons) {
 			switch (searchType) {
 			case MANDATORY:
-				if (new HashSet<>(person.getSkillset()).containsAll(criteriaSkillSet))
+				if (hasPersonGotAllSkills(person, skillNames))
 					matches.add(person);
 				break;
 			case OPTIONAL:
-				if (isThereAnyCommonElement(criteriaSkillSet, new HashSet<Skill>(person.getSkillset())))
+				if (hasPersonGotAnySkills(person, skillNames))
 					matches.add(person);
 				break;
 			}
 		}
-		return new HashSet<Person>(matches);
+		return matches;
 	}
 	
-	private boolean isThereAnyCommonElement(Set<Skill>a, Set<Skill> b) {
-		Set<Skill> c = new HashSet<Skill>(a);
-		c.retainAll(b);
-		return (c.size() > 0);
+	private boolean hasPersonGotAnySkills(Person person, Set<String> skillNames) {
+		for (Skill skill: person.getSkillset()) {
+			if (skillNames.contains(skill.getName()))
+				return true;
+		}
+		return false;
 	}
 	
-	private Set<Skill> convertCriteriaToSet(String searchCriteria) {
-		Set<Skill> criteriaSet = new HashSet<Skill>();
+	private boolean hasPersonGotAllSkills(Person person, Set<String> skillNames) {
+		for (Skill skill: person.getSkillset()) {
+			if (!skillNames.contains(skill.getName()))
+				return false;
+		}
+		return true;
+	}
+	
+	private Set<String> convertCriteriaToSet(String searchCriteria) {
+		Set<String> criteriaSet = new HashSet<String>();
 		for (String criterium: searchCriteria.split(";")) {
-			criteriaSet.add(new Skill(criterium, "", 0));
+			criteriaSet.add(criterium);
 		}
 		return criteriaSet;
 	}
