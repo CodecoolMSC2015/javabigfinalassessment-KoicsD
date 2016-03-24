@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import datatypes.Person;
+import searching.DefaultCaseException;
 import searching.SearchType;
 
 public class SocketClient implements AutoCloseable {
@@ -40,8 +41,9 @@ public class SocketClient implements AutoCloseable {
 			return orderPersons(persons, OrderType.AVG);
 		case OPTIONAL:
 			return orderPersons(persons, OrderType.MAX);
+		default:
+			throw new DefaultCaseException("No SearchType specified in SocketClient.getPersons");
 		}
-		return null;  // to make compiler calm
 	}
 	
 	// private assistant function to make an ordered list:

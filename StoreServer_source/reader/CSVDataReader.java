@@ -15,6 +15,7 @@ import com.csvreader.CsvReader;
 import datatypes.Employee;
 import datatypes.Person;
 import datatypes.Skill;
+import searching.DefaultCaseException;
 import searching.SearchType;
 
 public class CSVDataReader extends DataReader {
@@ -55,6 +56,8 @@ public class CSVDataReader extends DataReader {
 				if (hasPersonGotAnySkills(person, skillNames))
 					matches.add(person);
 				break;
+			default:
+				throw new DefaultCaseException("No SearchType specified in CSVDataReader.getPersons");
 			}
 		}
 		return matches;
