@@ -24,26 +24,26 @@ public class CSVDataReader extends DataReader {
 	private static final String[] CSV_HEADER = { "Name", "Email", "Skill", "SkillDescription", "SkillRate", "Salary" };
 
 	// instance variables:
-	private String csvFilePath;
+	private File csvFile;
 	private List<Person> persons;
-	private boolean fileParsed = false;  // TODO how about using a date-stamp instead of boolean? Parse only if not up-to-date.
+	private long fileLastParsed = 0l;
 	
 	// constructors:
 	public CSVDataReader(String csvFilePath) {
 		super();
-		this.csvFilePath = csvFilePath;
+		this.csvFile = new File(csvFilePath);
 	}
 	
 	public CSVDataReader(String searchCriteria, SearchType searchType, String csvFilePath) {
 		super(searchCriteria, searchType);
-		this.csvFilePath = csvFilePath;
+		this.csvFile = new File(csvFilePath);
 	}
 
 	// searcher:
 	@Override
 	public Set<Person> getPersons(String searchCriteria, SearchType searchType) throws IOException {
 		Set<Person> matches = new HashSet<Person>();
-		if (!fileParsed)
+		if (fileLastParsed < csvFile.lastModified())
 			parseFile();
 		Set<String> skillNames = convertCriteriaToSet(searchCriteria);
 		for (Person person: persons) {
@@ -90,7 +90,7 @@ public class CSVDataReader extends DataReader {
 	private void parseFile() throws IOException {
 		CsvReader reader = null;
 		try  {
-			reader = new CsvReader(csvFilePath);
+			reader = new CsvReader(csvFile.getAbsolutePath());
 			
 			if (!reader.readHeaders() || !Arrays.equals(CSV_HEADER, reader.getHeaders()))
 				throw new IOException("Invalid CSV-file header");
@@ -129,7 +129,7 @@ public class CSVDataReader extends DataReader {
 						}
 					} catch (NumberFormatException e) {
 						System.err.println("A NumberFormatException occurred when parsing CSV-file.");
-						System.err.println("File: " + new File(csvFilePath).getAbsolutePath());
+						System.err.println("File: " + csvFile.getAbsolutePath());
 						System.err.println("Line number: " + line);
 						System.err.println("Line content: " + reader.getRawRecord());
 						if (salary != null)
@@ -145,11 +145,11 @@ public class CSVDataReader extends DataReader {
 				}
 			}
 			this.persons = persons;
-			fileParsed = true;
 		} finally {
 			if (reader != null)
 				reader.close();
 		}
+		fileLastParsed = csvFile.lastModified();
 	}
 
 }
