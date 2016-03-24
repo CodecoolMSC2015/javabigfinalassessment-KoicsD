@@ -7,6 +7,7 @@ import java.util.List;
 import tools.HtmlCompatible;
 
 public class Person implements Serializable, HtmlCompatible {
+	// TODO it would be better to delete empty constructor
 
 	// instance variables:
 	private String name;

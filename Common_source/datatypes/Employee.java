@@ -1,6 +1,7 @@
 package datatypes;
 
 public class Employee extends Person {
+	// TODO it would be better to delete empty constructor
 	
 	// instance variables:
 	private int salary;
