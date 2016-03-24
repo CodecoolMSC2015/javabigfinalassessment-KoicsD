@@ -66,7 +66,7 @@ public class SearchServlet extends HttpServlet {
 	// intelligent searcher, asks SocketServer only if necessary:
 	private List<Person> getPersons(String searchCriteria, SearchType searchType, HttpSession session) throws IOException, ClassNotFoundException, ClassCastException {
 		if (session.getAttribute("searchHistory") == null) {
-			session.setAttribute("searchHistory", new HashMap<SearchParameters, List<Person>>());  // TODO not serializable! TomCat gets angry when shutting down.
+			session.setAttribute("searchHistory", new HashMap<SearchParameters, List<Person>>());
 		}
 		Map<SearchParameters, List<Person>> searchHistory = (Map<SearchParameters, List<Person>>)session.getAttribute("searchHistory");
 		SearchParameters parameters = new SearchParameters(searchCriteria, searchType);

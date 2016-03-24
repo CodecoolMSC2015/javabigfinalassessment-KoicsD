@@ -1,6 +1,8 @@
 package searching;
 
-public class SearchParameters {
+import java.io.Serializable;
+
+public class SearchParameters implements Serializable {
 	
 	// variables:
 	private String searchCriteria;
