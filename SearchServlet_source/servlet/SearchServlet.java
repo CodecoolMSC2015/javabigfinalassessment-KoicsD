@@ -2,6 +2,7 @@ package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +45,9 @@ public class SearchServlet extends HttpServlet {
 		resp.setContentType("text/html");
 		try (PrintWriter writer = resp.getWriter()) {
 			req.getSession().invalidate();
-			writer.print(generateHTML("Session Invalidated", "<h1>Your session has been invalidated.</h1>"));
+			writer.print(generateHTML("Session Invalidated",
+			"<h1>Your session has been successfully invalidated.</h1>\n" +
+			"<p>This page is the indicator of a service-function which is intended to invalidate HttpSession.</p>"));
 		}
 	}
 	
@@ -55,12 +58,17 @@ public class SearchServlet extends HttpServlet {
 			return SearchType.MANDATORY;
 		case "optional":
 			return SearchType.OPTIONAL;
+		default:
+			throw new InvalidFormException("The form you have filled is invalid.");
 		}
-		throw new InvalidFormException("The form you have filled is invalid.");
 	}
 	
 	private String getSearchCriteria(HttpServletRequest req) {
-		return req.getParameter("searchCriteria");
+		String[] criteriaArray = req.getParameter("searchCriteria").split("\n");
+		for (int i = 0; i < criteriaArray.length; ++i) {
+			criteriaArray[i] = criteriaArray[i].trim();
+		}
+		return String.join(";", criteriaArray);
 	}
 	
 	// intelligent searcher, asks SocketServer only if necessary:
