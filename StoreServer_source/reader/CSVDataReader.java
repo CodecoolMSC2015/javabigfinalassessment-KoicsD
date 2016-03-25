@@ -45,15 +45,14 @@ public class CSVDataReader extends DataReader {
 		Set<Person> matches = new HashSet<Person>();
 		if (fileLastParsed < csvFile.lastModified())
 			parseFile();
-		Set<String> skillNames = convertCriteriaToSet(searchCriteria);
 		for (Person person: persons) {
 			switch (searchType) {
 			case MANDATORY:
-				if (hasPersonGotAllSkills(person, skillNames))
+				if (hasPersonGotAllSkills(person, searchCriteria))
 					matches.add(person);
 				break;
 			case OPTIONAL:
-				if (hasPersonGotAnySkills(person, skillNames))
+				if (hasPersonGotAnySkills(person, searchCriteria))
 					matches.add(person);
 				break;
 			default:
@@ -63,30 +62,34 @@ public class CSVDataReader extends DataReader {
 		return matches;
 	}
 	
-	private boolean hasPersonGotAnySkills(Person person, Set<String> skillNames) {
-		for (Skill skill: person.getSkillset()) {
-			if (skillNames.contains(skill.getName()))
+	// private assistants of searcher:
+	private boolean hasPersonGotAnySkills(Person person, String criteriumSkillNames) {
+		Set<String> personSkillNames = getSkillNameSet(person);
+		for (String skillName: criteriumSkillNames.split(";")) {
+			if (personSkillNames.contains(skillName))
 				return true;
 		}
 		return false;
 	}
 	
-	private boolean hasPersonGotAllSkills(Person person, Set<String> skillNames) {
-		for (Skill skill: person.getSkillset()) {
-			if (!skillNames.contains(skill.getName()))
+	private boolean hasPersonGotAllSkills(Person person, String criteriumSkillNames) {
+		Set<String> personSkillNames = getSkillNameSet(person);
+		for (String skillName: criteriumSkillNames.split(";")) {
+			if (!personSkillNames.contains(skillName))
 				return false;
 		}
 		return true;
 	}
 	
-	private Set<String> convertCriteriaToSet(String searchCriteria) {
-		Set<String> criteriaSet = new HashSet<String>();
-		for (String criterium: searchCriteria.split(";")) {
-			criteriaSet.add(criterium);
+	private Set<String> getSkillNameSet(Person person) {
+		Set<String> skillNames = new HashSet<String>();
+		for (Skill skill: person.getSkillset()) {
+			skillNames.add(skill.getName());
 		}
-		return criteriaSet;
+		return skillNames;
 	}
 	
+	// CSV data-parser:
 	private void parseFile() throws IOException {
 		CsvReader reader = null;
 		try  {

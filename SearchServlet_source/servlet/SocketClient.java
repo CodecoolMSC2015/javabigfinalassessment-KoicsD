@@ -48,6 +48,7 @@ public class SocketClient implements AutoCloseable {
 	
 	// private assistant function to make an ordered list:
 	private static List<Person> orderPersons(Set<Person> setOfPersons, OrderType orderBy) {
+		// TODO when calculating maximum or average do we have to consider all skills or only matching skills?
 		List<Person> listOfPersons = new ArrayList<Person>(setOfPersons);
 		switch (orderBy) {
 		case MAX:

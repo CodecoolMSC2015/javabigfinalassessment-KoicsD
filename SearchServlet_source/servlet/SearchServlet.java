@@ -47,7 +47,7 @@ public class SearchServlet extends HttpServlet {
 			req.getSession().invalidate();
 			writer.print(generateHTML("Session Invalidated",
 			"<h1>Your session has been successfully invalidated.</h1>\n" +
-			"<p>This page is the indicator of a service-function which is intended to invalidate HttpSession.</p>"));
+			"<p>This page is an indicator of a service-function which is intended to invalidate HttpSession.</p>"));
 		}
 	}
 	
@@ -90,6 +90,7 @@ public class SearchServlet extends HttpServlet {
 	
 	// match-list printer:
 	private void printMatchesAsHtml(List<Person> persons, PrintWriter writer) {
+		// TODO how about highlighting matching skills?
 		String title = "Match List";
 		String body = "<h1>List of Persons Found:</h1>\n";
 		if (persons.size() == 0) {
