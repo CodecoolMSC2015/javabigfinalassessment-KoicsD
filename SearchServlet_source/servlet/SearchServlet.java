@@ -3,6 +3,7 @@ package servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,7 @@ import searching.SearchType;
 import tools.ConnectionParameters;
 
 public class SearchServlet extends HttpServlet {
-
+	
 	// POSTer:
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -27,11 +28,14 @@ public class SearchServlet extends HttpServlet {
 		resp.setContentType("text/html");
 		try (PrintWriter writer = resp.getWriter()) {  // PrintWrinter auto close
 			try {
+				ensureInitParams();
+				ensureFormContainsFields(req);
 				SearchType searchType = getSearchType(req);
 				String searchCriteria = getSearchCriteria(req);
 				List<Person> persons = getPersons(searchCriteria, searchType, req.getSession());  // socket connection here
 				printMatchesAsHtml(persons, writer);
-			} catch (IOException | ClassNotFoundException | ClassCastException | InvalidFormException e) {  // socket-related exceptions
+			} catch (IOException | ClassNotFoundException | ClassCastException |  // socket-related exceptions
+					InvalidFormException | InvalidConfigurationException e) {  // web-content related exceptions 
 				e.printStackTrace();
 				reportException(e, writer);
 			}
@@ -51,6 +55,24 @@ public class SearchServlet extends HttpServlet {
 		}
 	}
 	
+	// making sure initial parameters are defined correctly in Web-XML:
+	private void ensureInitParams() throws InvalidConfigurationException {
+		Enumeration<String> parameterNames = getInitParameterNames();
+		if (!parameterNames.hasMoreElements())
+			throw new InvalidConfigurationException("Web content descriptor must define one initial parameter for SearchServlet, named 'storeServerHost'");
+		if(!parameterNames.nextElement().equals("storeServerHost"))
+			throw new InvalidConfigurationException("Web content descriptor must define one initial parameter for SearchServlet, named 'storeServerHost'");
+		if(parameterNames.hasMoreElements())
+			throw new InvalidConfigurationException("Web content descriptor must define one initial parameter for SearchServlet, named 'storeServerHost'");
+	}
+	
+	// making sure form contains the necessary fields:
+	private void ensureFormContainsFields(HttpServletRequest req) throws InvalidFormException {
+		Map<String, String[]> parameters = req.getParameterMap();
+		if (!parameters.containsKey("searchType") || !parameters.containsKey("searchCriteria"))
+			throw new InvalidFormException("The form filled by User does not contain both fields 'searchType' and 'searchCriteria'");
+	}
+	
 	// regaining data from User:
 	private SearchType getSearchType(HttpServletRequest req) throws InvalidFormException {
 		switch (req.getParameter("searchType")) {
@@ -59,7 +81,7 @@ public class SearchServlet extends HttpServlet {
 		case "optional":
 			return SearchType.OPTIONAL;
 		default:
-			throw new InvalidFormException("The form you have filled is invalid.");
+			throw new InvalidFormException("User has not specifyed a search-type in the form.");
 		}
 	}
 	
