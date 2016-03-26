@@ -1,6 +1,8 @@
 package datatypes;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import tools.HtmlCompatible;
 
@@ -34,7 +36,16 @@ public class Skill implements Serializable, HtmlCompatible {
 
 	@Override
 	public String toHtmlString() {
-		String asHtml = getName() + "<br/>";
+		return toHtmlString(new HashSet<String>());
+	}
+	
+	@Override
+	public String toHtmlString(Set<String> skillNamesToHighlight) {
+		String asHtml = "";
+		if (skillNamesToHighlight.contains(getName()))
+			asHtml += "<mark>" + getName() + "</mark><br/>";
+		else
+			asHtml += getName() + "<br/>";
 		asHtml += "&nbsp;&nbsp;Rate: " + getRate() + "<br/>";
 		asHtml += "&nbsp;&nbsp;Description: " + getDescription() + "<br/>";
 		return asHtml;

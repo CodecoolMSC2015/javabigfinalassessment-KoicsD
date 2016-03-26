@@ -35,7 +35,7 @@ public class SearchServlet extends HttpServlet {
 				SearchType searchType = getSearchType(req);
 				Set<String> searchCriteria = getSearchCriteria(req);
 				List<Person> persons = getPersons(searchCriteria, searchType, req.getSession());  // socket connection here
-				printMatchesAsHtml(persons, writer);
+				printMatchesAsHtml(persons, searchCriteria, writer);
 			} catch (IOException | ClassNotFoundException | ClassCastException |  // socket-related exceptions
 					InvalidFormException | InvalidConfigurationException e) {  // web-content related exceptions 
 				e.printStackTrace();
@@ -114,8 +114,8 @@ public class SearchServlet extends HttpServlet {
 	}
 	
 	// match-list printer:
-	private void printMatchesAsHtml(List<Person> persons, PrintWriter writer) {
-		// TODO how about highlighting matching skills?
+	private void printMatchesAsHtml(List<Person> persons, Set<String> searchCriteria, PrintWriter writer) {
+		// TODO how about displaying it in a table form?
 		String title = "Match List";
 		String body = "<h1>List of Persons Found:</h1>\n";
 		if (persons.size() == 0) {
@@ -123,7 +123,7 @@ public class SearchServlet extends HttpServlet {
 		}
 		else {
 			for (Person person: persons) {
-				body += "<p>" + person.toHtmlString() + "</p>\n";
+				body += "<p>" + person.toHtmlString(searchCriteria) + "</p>\n";
 			}
 		}
 		body += "<p><a href=\"index.html\">back to main page</a></p>\n";

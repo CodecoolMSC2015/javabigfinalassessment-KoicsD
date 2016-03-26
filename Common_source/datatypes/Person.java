@@ -119,12 +119,20 @@ public class Person implements Serializable, HtmlCompatible {
 
 	@Override
 	public String toHtmlString() {
+		return toHtmlString(new HashSet<String>());
+	}
+	
+	@Override
+	public String toHtmlString(Set<String> skillNamesToHighlight) {
 		String asHtml = getName() + "<br/>";
 		asHtml += "&nbsp;&nbsp;Email: " + getEmail() + "<br/>";
 		if (!getSkillset().isEmpty()) {
 			asHtml += "&nbsp;&nbsp;Skills:<br/>";
 			for (Skill skill: getSkillset()) {
-				asHtml += "&nbsp;&nbsp;&nbsp;&nbsp;" + skill.getName() + "&nbsp;&nbsp;(" + skill.getRate() + ")<br/>";
+				if (skillNamesToHighlight.contains(skill.getName()))
+					asHtml += "&nbsp;&nbsp;&nbsp;&nbsp;<mark>" + skill.getName() + "</mark>&nbsp;&nbsp;(" + skill.getRate() + ")<br/>";
+				else
+					asHtml += "&nbsp;&nbsp;&nbsp;&nbsp;" + skill.getName() + "&nbsp;&nbsp;(" + skill.getRate() + ")<br/>";
 			}
 		}
 		return asHtml;
