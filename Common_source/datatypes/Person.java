@@ -26,7 +26,7 @@ public class Person implements Serializable, HtmlCompatible {
 		
 	}
 
-	// getters and setters (and skill-adder):
+	// getters and setters:
 	public String getName() {
 		return name;
 	}
@@ -51,13 +51,16 @@ public class Person implements Serializable, HtmlCompatible {
 		this.skillSet = skillSet;
 	}
 	
-	// skill-adder:
+	// further tools for skillSet:
 	public void addSkill(Skill skill) {
 		// TODO: what if (skillset == null) ?
 		skillSet.add(skill);
 	}
 	
-	// getter for skill-names as Set:
+	public void removeSkill(Skill skill) {
+		skillSet.remove(skill);
+	}
+	
 	public Set<String> getSkillNameSet() {
 		Set<String> skillNames = new HashSet<String>();
 		for (Skill skill: skillSet) {
@@ -66,60 +69,10 @@ public class Person implements Serializable, HtmlCompatible {
 		return skillNames;
 	}
 	
-	// statistical functions:  TODO move them to a separate tool-class in order to avoid god-object effect
-	public double getMaxSkillRate() {
-		return getMaxSkillRate(getSkillNameSet());
-	}
-	
-	public double getMaxSkillRate(Set<String> skillNamesToConsider) {
-		double maxSkillRate = 0;
-		boolean first = true;
-		for (Skill skill: skillSet) {
-			if (skillNamesToConsider.contains(skill.getName())) {
-				if (first) {
-					maxSkillRate = skill.getRate();
-					first = false;
-				} else if (skill.getRate() > maxSkillRate) {
-					maxSkillRate = skill.getRate();
-				}
-			}
-		}
-		return maxSkillRate;
-	}
-	
-	public double getAverageSkillRate() {
-		return getTotalSkillRate() / getNumberOfSkills();
-	}
-	
-	public double getAverageSkillRate(Set<String> skillNamesToConsider) {
-		return getTotalSkillRate(skillNamesToConsider) / getNumberOfSkills(skillNamesToConsider);
-	}
-	
 	public int getNumberOfSkills() {
 		return skillSet.size();
 	}
 	
-	public int getNumberOfSkills(Set<String> skillNamesToConsider) {
-		int numberOfSkills = 0;
-		for (Skill skill: skillSet)
-			if (skillNamesToConsider.contains(skill.getName()))
-				++ numberOfSkills;
-		return numberOfSkills;
-	}
-	
-	public double getTotalSkillRate() {
-		return getTotalSkillRate(getSkillNameSet());
-	}
-	
-	public double getTotalSkillRate(Set<String> skillNamesToConsider) {
-		double totalSkillRate = 0;
-		for (Skill skill: skillSet) {
-			if (skillNamesToConsider.contains(skill.getName()))
-				totalSkillRate += skill.getRate();
-		}
-		return totalSkillRate;
-	}
-
 	// overriding idea of equivalent:
 	@Override
 	public int hashCode() {

@@ -14,6 +14,7 @@ import datatypes.Person;
 import searching.DefaultCaseException;
 import searching.SearchParameters;
 import searching.SearchType;
+import tools.PersonSkillStatistics;
 
 public class SocketClient implements AutoCloseable {
 
@@ -53,10 +54,12 @@ public class SocketClient implements AutoCloseable {
 		case MAX:
 			listOfPersons.sort(new Comparator<Person>(){
 				@Override
-				public int compare(Person o1, Person o2) {
-					if (o1.getMaxSkillRate(skillNamesToConsider) > o2.getMaxSkillRate(skillNamesToConsider))
+				public int compare(Person p1, Person p2) {
+					double maxSkillRate1 = PersonSkillStatistics.getMaxSkillRate(p1, skillNamesToConsider);
+					double maxSkillRate2 = PersonSkillStatistics.getMaxSkillRate(p2, skillNamesToConsider);
+					if (maxSkillRate1 > maxSkillRate2)
 						return -1;
-					if (o1.getMaxSkillRate(skillNamesToConsider) < o2.getMaxSkillRate(skillNamesToConsider))
+					if (maxSkillRate1 < maxSkillRate2)
 						return 1;
 					return 0;
 				}
@@ -65,10 +68,12 @@ public class SocketClient implements AutoCloseable {
 		case AVG:
 			listOfPersons.sort(new Comparator<Person>(){
 				@Override
-				public int compare(Person o1, Person o2) {
-					if (o1.getAverageSkillRate(skillNamesToConsider) > o2.getAverageSkillRate(skillNamesToConsider))
+				public int compare(Person p1, Person p2) {
+					double avgSkillRate1 = PersonSkillStatistics.getAverageSkillRate(p1, skillNamesToConsider);
+					double avgSkillRate2 = PersonSkillStatistics.getAverageSkillRate(p2, skillNamesToConsider);
+					if (avgSkillRate1 > avgSkillRate2)
 						return -1;
-					if (o1.getAverageSkillRate(skillNamesToConsider) < o2.getAverageSkillRate(skillNamesToConsider))
+					if (avgSkillRate1 < avgSkillRate2)
 						return 1;
 					return 0;
 				}
