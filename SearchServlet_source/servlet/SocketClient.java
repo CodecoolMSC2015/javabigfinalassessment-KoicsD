@@ -38,26 +38,25 @@ public class SocketClient implements AutoCloseable {
 		}
 		switch (searchParameters.getSearchType()) {
 		case MANDATORY:
-			return orderPersons(persons, OrderType.AVG);
+			return orderPersons(persons, searchParameters.getSearchCriteria(), OrderType.AVG);
 		case OPTIONAL:
-			return orderPersons(persons, OrderType.MAX);
+			return orderPersons(persons, searchParameters.getSearchCriteria(), OrderType.MAX);
 		default:
 			throw new DefaultCaseException("No SearchType specified in searchParameters: search.SearchParameters");
 		}
 	}
 	
 	// private assistant function to make an ordered list:
-	private static List<Person> orderPersons(Set<Person> setOfPersons, OrderType orderBy) {
-		// TODO when calculating maximum or average do we have to consider all skills or only matching skills?
+	private static List<Person> orderPersons(Set<Person> setOfPersons, Set<String> skillNamesToConsider, OrderType orderBy) {
 		List<Person> listOfPersons = new ArrayList<Person>(setOfPersons);
 		switch (orderBy) {
 		case MAX:
 			listOfPersons.sort(new Comparator<Person>(){
 				@Override
 				public int compare(Person o1, Person o2) {
-					if (o1.getMaxSkillRate() > o2.getMaxSkillRate())
+					if (o1.getMaxSkillRate(skillNamesToConsider) > o2.getMaxSkillRate(skillNamesToConsider))
 						return -1;
-					if (o1.getMaxSkillRate() < o2.getMaxSkillRate())
+					if (o1.getMaxSkillRate(skillNamesToConsider) < o2.getMaxSkillRate(skillNamesToConsider))
 						return 1;
 					return 0;
 				}
@@ -67,9 +66,9 @@ public class SocketClient implements AutoCloseable {
 			listOfPersons.sort(new Comparator<Person>(){
 				@Override
 				public int compare(Person o1, Person o2) {
-					if (o1.getAverageSkillRate() > o2.getAverageSkillRate())
+					if (o1.getAverageSkillRate(skillNamesToConsider) > o2.getAverageSkillRate(skillNamesToConsider))
 						return -1;
-					if (o1.getAverageSkillRate() < o2.getAverageSkillRate())
+					if (o1.getAverageSkillRate(skillNamesToConsider) < o2.getAverageSkillRate(skillNamesToConsider))
 						return 1;
 					return 0;
 				}

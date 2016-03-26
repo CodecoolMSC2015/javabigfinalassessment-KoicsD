@@ -46,9 +46,9 @@ public class Employee extends Person {
 		String asHtml = getName() + "<br/>";
 		asHtml += "&nbsp;&nbsp;Email: " + getEmail() + "<br/>";
 		asHtml += "&nbsp;&nbsp;Salary: " + getSalary() + "<br/>";
-		if (!getSkillset().isEmpty()) {
+		if (!getSkillSet().isEmpty()) {
 			asHtml += "&nbsp;&nbsp;Skills:<br/>";
-			for (Skill skill: getSkillset()) {
+			for (Skill skill: getSkillSet()) {
 				if (skillNamesToHighlight.contains(skill.getName()))
 					asHtml += "&nbsp;&nbsp;&nbsp;&nbsp;<mark>" + skill.getName() + "</mark>&nbsp;&nbsp;(" + skill.getRate() + ")<br/>";
 				else

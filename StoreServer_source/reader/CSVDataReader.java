@@ -55,7 +55,7 @@ public class CSVDataReader extends DataReader {
 				if (hasPersonGotAnySkills(person, searchCriteria))
 					matches.add(person);
 				break;
-			default:
+			default:  // unreachable, but somehow we have to make compiler calm
 				throw new DefaultCaseException("No valid SearchType specified in CSVDataReader.getPersons");
 			}
 		}
@@ -64,7 +64,7 @@ public class CSVDataReader extends DataReader {
 	
 	// private assistants of searcher:
 	private boolean hasPersonGotAnySkills(Person person, Set<String> criteriumSkillNames) {
-		Set<String> personSkillNames = getSkillNameSet(person);
+		Set<String> personSkillNames = person.getSkillNameSet();
 		for (String skillName: criteriumSkillNames) {
 			if (personSkillNames.contains(skillName))
 				return true;
@@ -73,20 +73,12 @@ public class CSVDataReader extends DataReader {
 	}
 	
 	private boolean hasPersonGotAllSkills(Person person, Set<String> criteriumSkillNames) {
-		Set<String> personSkillNames = getSkillNameSet(person);
+		Set<String> personSkillNames = person.getSkillNameSet();
 		for (String skillName: criteriumSkillNames) {
 			if (!personSkillNames.contains(skillName))
 				return false;
 		}
 		return true;
-	}
-	
-	private Set<String> getSkillNameSet(Person person) {
-		Set<String> skillNames = new HashSet<String>();
-		for (Skill skill: person.getSkillset()) {
-			skillNames.add(skill.getName());
-		}
-		return skillNames;
 	}
 	
 	// CSV data-parser:

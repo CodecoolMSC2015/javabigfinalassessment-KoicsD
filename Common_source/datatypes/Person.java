@@ -12,14 +12,14 @@ public class Person implements Serializable, HtmlCompatible {
 	// instance variables:
 	private String name;
 	private String email;
-	private Set<Skill> skillset;
+	private Set<Skill> skillSet;
 	
 	// constructors:
 	public Person(String name, String email) {
 		super();
 		this.name = name;
 		this.email = email;
-		skillset = new HashSet<Skill>();
+		skillSet = new HashSet<Skill>();
 	}
 	
 	public Person() {
@@ -43,28 +43,45 @@ public class Person implements Serializable, HtmlCompatible {
 		this.email = email;
 	}
 
-	public Set<Skill> getSkillset() {
-		return skillset;
+	public Set<Skill> getSkillSet() {
+		return skillSet;
 	}
 
-	public void setSkillset(Set<Skill> skillset) {
-		this.skillset = skillset;
+	public void setSkillSet(Set<Skill> skillSet) {
+		this.skillSet = skillSet;
 	}
 	
+	// skill-adder:
 	public void addSkill(Skill skill) {
 		// TODO: what if (skillset == null) ?
-		skillset.add(skill);
+		skillSet.add(skill);
 	}
 	
+	// getter for skill-names as Set:
+	public Set<String> getSkillNameSet() {
+		Set<String> skillNames = new HashSet<String>();
+		for (Skill skill: skillSet) {
+			skillNames.add(skill.getName());
+		}
+		return skillNames;
+	}
+	
+	// statistical functions:  TODO move them to a separate tool-class in order to avoid god-object effect
 	public double getMaxSkillRate() {
+		return getMaxSkillRate(getSkillNameSet());
+	}
+	
+	public double getMaxSkillRate(Set<String> skillNamesToConsider) {
 		double maxSkillRate = 0;
 		boolean first = true;
-		for (Skill skill: skillset) {
-			if (first) {
-				maxSkillRate = skill.getRate();
-				first = false;
-			} else if (skill.getRate() > maxSkillRate) {
-				maxSkillRate = skill.getRate();
+		for (Skill skill: skillSet) {
+			if (skillNamesToConsider.contains(skill.getName())) {
+				if (first) {
+					maxSkillRate = skill.getRate();
+					first = false;
+				} else if (skill.getRate() > maxSkillRate) {
+					maxSkillRate = skill.getRate();
+				}
 			}
 		}
 		return maxSkillRate;
@@ -74,18 +91,36 @@ public class Person implements Serializable, HtmlCompatible {
 		return getTotalSkillRate() / getNumberOfSkills();
 	}
 	
+	public double getAverageSkillRate(Set<String> skillNamesToConsider) {
+		return getTotalSkillRate(skillNamesToConsider) / getNumberOfSkills(skillNamesToConsider);
+	}
+	
 	public int getNumberOfSkills() {
-		return skillset.size();
+		return skillSet.size();
+	}
+	
+	public int getNumberOfSkills(Set<String> skillNamesToConsider) {
+		int numberOfSkills = 0;
+		for (Skill skill: skillSet)
+			if (skillNamesToConsider.contains(skill.getName()))
+				++ numberOfSkills;
+		return numberOfSkills;
 	}
 	
 	public double getTotalSkillRate() {
+		return getTotalSkillRate(getSkillNameSet());
+	}
+	
+	public double getTotalSkillRate(Set<String> skillNamesToConsider) {
 		double totalSkillRate = 0;
-		for (Skill skill: skillset) {
-			totalSkillRate += skill.getRate();
+		for (Skill skill: skillSet) {
+			if (skillNamesToConsider.contains(skill.getName()))
+				totalSkillRate += skill.getRate();
 		}
 		return totalSkillRate;
 	}
 
+	// overriding idea of equivalent:
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -117,6 +152,7 @@ public class Person implements Serializable, HtmlCompatible {
 		return true;
 	}
 
+	// implementing to-HTML converter and highlight:
 	@Override
 	public String toHtmlString() {
 		return toHtmlString(new HashSet<String>());
@@ -126,9 +162,9 @@ public class Person implements Serializable, HtmlCompatible {
 	public String toHtmlString(Set<String> skillNamesToHighlight) {
 		String asHtml = getName() + "<br/>";
 		asHtml += "&nbsp;&nbsp;Email: " + getEmail() + "<br/>";
-		if (!getSkillset().isEmpty()) {
+		if (!getSkillSet().isEmpty()) {
 			asHtml += "&nbsp;&nbsp;Skills:<br/>";
-			for (Skill skill: getSkillset()) {
+			for (Skill skill: getSkillSet()) {
 				if (skillNamesToHighlight.contains(skill.getName()))
 					asHtml += "&nbsp;&nbsp;&nbsp;&nbsp;<mark>" + skill.getName() + "</mark>&nbsp;&nbsp;(" + skill.getRate() + ")<br/>";
 				else
