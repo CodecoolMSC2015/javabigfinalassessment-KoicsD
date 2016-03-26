@@ -1,8 +1,8 @@
 package datatypes;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import tools.HtmlCompatible;
 
@@ -12,14 +12,14 @@ public class Person implements Serializable, HtmlCompatible {
 	// instance variables:
 	private String name;
 	private String email;
-	private List<Skill> skillset;
+	private Set<Skill> skillset;
 	
 	// constructors:
 	public Person(String name, String email) {
 		super();
 		this.name = name;
 		this.email = email;
-		skillset = new ArrayList<Skill>();
+		skillset = new HashSet<Skill>();
 	}
 	
 	public Person() {
@@ -43,11 +43,11 @@ public class Person implements Serializable, HtmlCompatible {
 		this.email = email;
 	}
 
-	public List<Skill> getSkillset() {
+	public Set<Skill> getSkillset() {
 		return skillset;
 	}
 
-	public void setSkillset(List<Skill> skillset) {
+	public void setSkillset(Set<Skill> skillset) {
 		this.skillset = skillset;
 	}
 	
