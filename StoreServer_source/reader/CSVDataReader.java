@@ -20,7 +20,7 @@ import searching.SearchType;
 
 public class CSVDataReader extends DataReader {
 	
-	// csv header:
+	// CSV-header:
 	private static final String[] CSV_HEADER = { "Name", "Email", "Skill", "SkillDescription", "SkillRate", "Salary" };
 
 	// instance variables:
@@ -34,14 +34,14 @@ public class CSVDataReader extends DataReader {
 		this.csvFile = new File(csvFilePath);
 	}
 	
-	public CSVDataReader(String searchCriteria, SearchType searchType, String csvFilePath) {
+	public CSVDataReader(Set<String> searchCriteria, SearchType searchType, String csvFilePath) {
 		super(searchCriteria, searchType);
 		this.csvFile = new File(csvFilePath);
 	}
 
 	// searcher:
 	@Override
-	public Set<Person> getPersons(String searchCriteria, SearchType searchType) throws IOException {
+	public Set<Person> getPersons(Set<String> searchCriteria, SearchType searchType) throws IOException {
 		Set<Person> matches = new HashSet<Person>();
 		if (fileLastParsed < csvFile.lastModified())
 			parseFile();
@@ -63,18 +63,18 @@ public class CSVDataReader extends DataReader {
 	}
 	
 	// private assistants of searcher:
-	private boolean hasPersonGotAnySkills(Person person, String criteriumSkillNames) {
+	private boolean hasPersonGotAnySkills(Person person, Set<String> criteriumSkillNames) {
 		Set<String> personSkillNames = getSkillNameSet(person);
-		for (String skillName: criteriumSkillNames.split(";")) {
+		for (String skillName: criteriumSkillNames) {
 			if (personSkillNames.contains(skillName))
 				return true;
 		}
 		return false;
 	}
 	
-	private boolean hasPersonGotAllSkills(Person person, String criteriumSkillNames) {
+	private boolean hasPersonGotAllSkills(Person person, Set<String> criteriumSkillNames) {
 		Set<String> personSkillNames = getSkillNameSet(person);
-		for (String skillName: criteriumSkillNames.split(";")) {
+		for (String skillName: criteriumSkillNames) {
 			if (!personSkillNames.contains(skillName))
 				return false;
 		}

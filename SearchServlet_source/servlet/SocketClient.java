@@ -28,7 +28,7 @@ public class SocketClient implements AutoCloseable {
 	}
 
 	// querier:
-	public List<Person> getPersons(String searchCriteria, SearchType searchType) throws IOException, ClassNotFoundException, ClassCastException {
+	public List<Person> getPersons(Set<String> searchCriteria, SearchType searchType) throws IOException, ClassNotFoundException, ClassCastException {
 		Set<Person> persons = null;
 		try (	ObjectOutputStream oOS = new ObjectOutputStream(socket.getOutputStream());
 				ObjectInputStream oIS = new ObjectInputStream(socket.getInputStream())) {

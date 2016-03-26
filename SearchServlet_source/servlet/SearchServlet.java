@@ -5,8 +5,10 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,7 +33,7 @@ public class SearchServlet extends HttpServlet {
 				ensureInitParams();
 				ensureFormContainsFields(req);
 				SearchType searchType = getSearchType(req);
-				String searchCriteria = getSearchCriteria(req);
+				Set<String> searchCriteria = getSearchCriteria(req);
 				List<Person> persons = getPersons(searchCriteria, searchType, req.getSession());  // socket connection here
 				printMatchesAsHtml(persons, writer);
 			} catch (IOException | ClassNotFoundException | ClassCastException |  // socket-related exceptions
@@ -81,20 +83,21 @@ public class SearchServlet extends HttpServlet {
 		case "optional":
 			return SearchType.OPTIONAL;
 		default:
-			throw new InvalidFormException("User has not specifyed a search-type in the form.");
+			throw new InvalidFormException("User has not specifyed any valid search-types in the form.");
 		}
 	}
 	
-	private String getSearchCriteria(HttpServletRequest req) {
+	private Set<String> getSearchCriteria(HttpServletRequest req) {
 		String[] criteriaArray = req.getParameter("searchCriteria").split("\n");
+		HashSet<String> criteriaSet = new HashSet<String>();
 		for (int i = 0; i < criteriaArray.length; ++i) {
-			criteriaArray[i] = criteriaArray[i].trim();
+			criteriaSet.add(criteriaArray[i].trim());
 		}
-		return String.join(";", criteriaArray);
+		return criteriaSet;
 	}
 	
 	// intelligent searcher, asks SocketServer only if necessary:
-	private List<Person> getPersons(String searchCriteria, SearchType searchType, HttpSession session) throws IOException, ClassNotFoundException, ClassCastException {
+	private List<Person> getPersons(Set<String> searchCriteria, SearchType searchType, HttpSession session) throws IOException, ClassNotFoundException, ClassCastException {
 		if (session.getAttribute("searchHistory") == null) {
 			session.setAttribute("searchHistory", new HashMap<SearchParameters, List<Person>>());
 		}

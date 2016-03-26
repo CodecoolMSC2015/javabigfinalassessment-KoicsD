@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Set;
 
 import reader.DataReader;
 import searching.SearchType;
@@ -19,7 +20,7 @@ public class SocketSession implements AutoCloseable {
 	private ObjectInputStream oIS = null;
 	
 	private boolean running = false;
-	private String searchCriteria = null;
+	private Set<String> searchCriteria = null;
 	private SearchType searchType = null;
 	
 	// constructor:
@@ -66,8 +67,8 @@ public class SocketSession implements AutoCloseable {
 	private void receive() throws IOException {
 		try {
 			Object objectReceived = oIS.readObject();
-			if (objectReceived instanceof String && searchCriteria == null) {
-				searchCriteria = (String)objectReceived;
+			if (objectReceived instanceof Set<?> && searchCriteria == null) {
+				searchCriteria = (Set<String>)objectReceived;
 				if (searchType != null)
 					sendData();
 			} else if (objectReceived instanceof SearchType && searchType == null) {
@@ -92,7 +93,7 @@ public class SocketSession implements AutoCloseable {
 		searchType = null;
 	}
 	
-	// handler for wrong request:
+	// handler for wrong request: TODO something smarter should be used
 	private void sendNull() throws IOException {
 		searchCriteria = null;
 		searchType = null;

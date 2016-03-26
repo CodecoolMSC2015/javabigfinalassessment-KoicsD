@@ -9,24 +9,24 @@ import searching.SearchType;
 public abstract class DataReader {
 
 	// instance variables:
-	private String searchCriteria;
+	private Set<String> searchCriteria;
 	private SearchType searchType;
 
 	// constructors:
 	public DataReader() {
 	}
 
-	public DataReader(String searchCriteria, SearchType searchType) {
+	public DataReader(Set<String> searchCriteria, SearchType searchType) {
 		this.searchCriteria = searchCriteria;
 		this.searchType = searchType;
 	}
 
 	// getters and setters:
-	public String getSearchCriteria() {
+	public Set<String> getSearchCriteria() {
 		return searchCriteria;
 	}
 
-	public void setSearchCriteria(String searchCriteria) {
+	public void setSearchCriteria(Set<String> searchCriteria) {
 		this.searchCriteria = searchCriteria;
 	}
 
@@ -43,6 +43,6 @@ public abstract class DataReader {
 		return getPersons(searchCriteria, searchType);
 	}
 	
-	public abstract Set<Person> getPersons(String searchCriteria, SearchType searchType) throws IOException;
+	public abstract Set<Person> getPersons(Set<String> searchCriteria, SearchType searchType) throws IOException;
 
 }
