@@ -12,6 +12,7 @@ import java.util.Set;
 
 import datatypes.Person;
 import searching.DefaultCaseException;
+import searching.SearchParameters;
 import searching.SearchType;
 
 public class SocketClient implements AutoCloseable {
@@ -28,21 +29,20 @@ public class SocketClient implements AutoCloseable {
 	}
 
 	// querier:
-	public List<Person> getPersons(Set<String> searchCriteria, SearchType searchType) throws IOException, ClassNotFoundException, ClassCastException {
+	public List<Person> getPersons(SearchParameters searchParameters) throws IOException, ClassNotFoundException, ClassCastException {
 		Set<Person> persons = null;
 		try (	ObjectOutputStream oOS = new ObjectOutputStream(socket.getOutputStream());
 				ObjectInputStream oIS = new ObjectInputStream(socket.getInputStream())) {
-			oOS.writeObject(searchType);
-			oOS.writeObject(searchCriteria);
+			oOS.writeObject(searchParameters);
 			persons = (Set<Person>)oIS.readObject();
 		}
-		switch (searchType) {
+		switch (searchParameters.getSearchType()) {
 		case MANDATORY:
 			return orderPersons(persons, OrderType.AVG);
 		case OPTIONAL:
 			return orderPersons(persons, OrderType.MAX);
 		default:
-			throw new DefaultCaseException("No SearchType specified in SocketClient.getPersons");
+			throw new DefaultCaseException("No SearchType specified in searchParameters: search.SearchParameters");
 		}
 	}
 	

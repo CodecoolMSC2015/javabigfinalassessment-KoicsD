@@ -56,7 +56,7 @@ public class CSVDataReader extends DataReader {
 					matches.add(person);
 				break;
 			default:
-				throw new DefaultCaseException("No SearchType specified in CSVDataReader.getPersons");
+				throw new DefaultCaseException("No valid SearchType specified in CSVDataReader.getPersons");
 			}
 		}
 		return matches;

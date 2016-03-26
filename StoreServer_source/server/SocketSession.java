@@ -7,8 +7,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Set;
 
+import datatypes.Person;
 import reader.DataReader;
-import searching.SearchType;
+import searching.SearchParameters;
 
 public class SocketSession implements AutoCloseable {
 
@@ -20,8 +21,8 @@ public class SocketSession implements AutoCloseable {
 	private ObjectInputStream oIS = null;
 	
 	private boolean running = false;
-	private Set<String> searchCriteria = null;
-	private SearchType searchType = null;
+	private SearchParameters searchParameters = null;
+	private Set<Person> personsFound = null;
 	
 	// constructor:
 	public SocketSession(PersonStoreSocketServer parent) throws IOException {
@@ -67,36 +68,26 @@ public class SocketSession implements AutoCloseable {
 	private void receive() throws IOException {
 		try {
 			Object objectReceived = oIS.readObject();
-			if (objectReceived instanceof Set<?> && searchCriteria == null) {
-				searchCriteria = (Set<String>)objectReceived;
-				if (searchType != null)
-					sendData();
-			} else if (objectReceived instanceof SearchType && searchType == null) {
-				searchType = (SearchType)objectReceived;
-				if (searchCriteria != null)
-					sendData();
-			} else {
-				sendNull();
-			}
-		} catch (ClassNotFoundException e) {
+			searchParameters = (SearchParameters)objectReceived;
+			getPersons();
+			sendPersons();
+		} catch (ClassNotFoundException | ClassCastException e) {
 			sendNull();
 			e.printStackTrace();
 		}
 	}
 	
+	private void getPersons() throws IOException {
+		personsFound = store.getPersons(searchParameters);
+	}
+	
 	// sender:
-	private void sendData() throws IOException {
-		store.setSearchCriteria(searchCriteria);
-		store.setSearchType(searchType);
-		oOS.writeObject(store.getPersons());
-		searchCriteria = null;
-		searchType = null;
+	private void sendPersons() throws IOException {
+		oOS.writeObject(personsFound);
 	}
 	
 	// handler for wrong request: TODO something smarter should be used
 	private void sendNull() throws IOException {
-		searchCriteria = null;
-		searchType = null;
 		oOS.writeObject(null);
 	}
 	

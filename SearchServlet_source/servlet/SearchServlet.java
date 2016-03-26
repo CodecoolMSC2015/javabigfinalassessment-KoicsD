@@ -107,7 +107,7 @@ public class SearchServlet extends HttpServlet {
 			return searchHistory.get(parameters);
 		try (SocketClient socketClient = new SocketClient(	getInitParameter("storeServerHost"),  // socket connection auto close
 				ConnectionParameters.getPortNumber())) {
-			List<Person> personsReceived = socketClient.getPersons(searchCriteria, searchType);
+			List<Person> personsReceived = socketClient.getPersons(parameters);
 			searchHistory.put(parameters, personsReceived);
 			return personsReceived;
 		}
