@@ -115,17 +115,17 @@ public class SearchServlet extends HttpServlet {
 	
 	// match-list printer:
 	private void printMatchesAsHtml(List<Person> persons, Set<String> searchCriteria, PrintWriter writer) {
-		// TODO how about displaying it in a table form?
 		String title = "Match List";
 		String body = "<h1>List of Persons Found:</h1>\n";
-		if (persons.size() == 0) {
-			body += "<p>No persons found.</p>\n";
-		}
-		else {
-			for (Person person: persons) {
-				body += "<p>" + ToHtmlConverter.convertToHtmlString(person, searchCriteria) + "</p>\n";
-			}
-		}
+		if (persons.size() == 0)
+			body += "<h2>No persons found.</h2>\n";
+		body += "<table border=\"1\">\n";
+		body += "<theader>" + ToHtmlConverter.getPersonTableHeader() + "</theader>\n";
+		body += "<tbody>\n";
+		for (Person person: persons)
+			body += ToHtmlConverter.convertToTableRecords(person, searchCriteria) + "\n";
+		body += "</tbody>\n";
+		body += "</table>\n";
 		body += "<p><a href=\"index.html\">back to main page</a></p>\n";
 		writer.print(generateHTML(title, body));
 		writer.flush();
