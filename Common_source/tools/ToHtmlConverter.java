@@ -70,7 +70,7 @@ public class ToHtmlConverter {
 	public static String convertToTableRecords(Person person, Set<String> skillNamesToHighlight) {
 		String[] nonSkillContent = getNonSkillContent(person);
 		Set<Skill> skillSet = person.getSkillSet();
-		return buildRecords(nonSkillContent, skillSet);
+		return buildRecords(nonSkillContent, skillSet, skillNamesToHighlight);
 	}
 	
 	// private assistants for to-table-record converters:
@@ -85,33 +85,35 @@ public class ToHtmlConverter {
 		return nonSkillContent;
 	}
 	
-	private static String buildRecords(String[] nonSkillContent, Set<Skill> skillSet) {
+	private static String buildRecords(String[] nonSkillContent, Set<Skill> skillSet, Set<String> skillNamesToHighlight) {
 		String records = ""; 
 		if (skillSet.size() == 0) {
 			records += tagAsRecord(
-					tagAsDataCell(nonSkillContent[0]) +
-					tagAsDataCell(nonSkillContent[1]) +
-					tagAsDataCell(nonSkillContent[2]) +
-					tagAsDataCell("&nbsp;") +
-					tagAsDataCell("&nbsp;")
+					tagAsDataCell(nonSkillContent[0], false) +
+					tagAsDataCell(nonSkillContent[1], false) +
+					tagAsDataCell(nonSkillContent[2], false) +
+					tagAsDataCell("&nbsp;", false) +
+					tagAsDataCell("&nbsp;", false)
 			);
 		}
 		else {
 			boolean firstRecord = true;
+			boolean highlightNecessary;
 			for (Skill skill: skillSet) {
+				highlightNecessary = skillNamesToHighlight != null && skillNamesToHighlight.contains(skill.getName()); 
 				if (firstRecord) {
 					records += tagAsRecord(
 							tagAsDataCell(skillSet.size(), 1, nonSkillContent[0]) +
 							tagAsDataCell(skillSet.size(), 1, nonSkillContent[1]) +
 							tagAsDataCell(skillSet.size(), 1, nonSkillContent[2]) +
-							tagAsDataCell(skill.getName()) +
-							tagAsDataCell(String.valueOf(skill.getRate()))
+							tagAsDataCell(skill.getName(), highlightNecessary) +
+							tagAsDataCell(String.valueOf(skill.getRate()), highlightNecessary)
 					);
 					firstRecord = false;
 				} else {
 					records += tagAsRecord(
-							tagAsDataCell(skill.getName()) +
-							tagAsDataCell(String.valueOf(skill.getRate()))
+							tagAsDataCell(skill.getName(), highlightNecessary) +
+							tagAsDataCell(String.valueOf(skill.getRate()), highlightNecessary)
 					);
 				}
 			}
@@ -119,7 +121,9 @@ public class ToHtmlConverter {
 		return records;
 	}
 	
-	private static String tagAsDataCell(String content) {
+	private static String tagAsDataCell(String content, boolean highlight) {
+		if (highlight)
+			content = toHtmlTag("mark", content);
 		return toHtmlTag("td", content);
 	}
 	
