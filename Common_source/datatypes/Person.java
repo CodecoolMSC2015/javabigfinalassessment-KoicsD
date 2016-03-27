@@ -105,23 +105,15 @@ public class Person implements Serializable, HtmlCompatible {
 		return true;
 	}
 
-	// implementing to-HTML converter and highlight:
+	// implementing to-HTML converter:
 	@Override
 	public String toHtmlString() {
-		return toHtmlString(new HashSet<String>());
-	}
-	
-	@Override
-	public String toHtmlString(Set<String> skillNamesToHighlight) {
 		String asHtml = getName() + "<br/>";
 		asHtml += "&nbsp;&nbsp;Email: " + getEmail() + "<br/>";
 		if (!getSkillSet().isEmpty()) {
 			asHtml += "&nbsp;&nbsp;Skills:<br/>";
 			for (Skill skill: getSkillSet()) {
-				if (skillNamesToHighlight.contains(skill.getName()))
-					asHtml += "&nbsp;&nbsp;&nbsp;&nbsp;<mark>" + skill.getName() + "</mark>&nbsp;&nbsp;(" + skill.getRate() + ")<br/>";
-				else
-					asHtml += "&nbsp;&nbsp;&nbsp;&nbsp;" + skill.getName() + "&nbsp;&nbsp;(" + skill.getRate() + ")<br/>";
+				asHtml += "&nbsp;&nbsp;&nbsp;&nbsp;" + skill.getName() + "&nbsp;&nbsp;(" + skill.getRate() + ")<br/>";
 			}
 		}
 		return asHtml;

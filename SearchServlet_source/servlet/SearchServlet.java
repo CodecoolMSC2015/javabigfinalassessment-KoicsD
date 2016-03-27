@@ -2,7 +2,6 @@ package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -20,6 +19,7 @@ import datatypes.Person;
 import searching.SearchParameters;
 import searching.SearchType;
 import tools.ConnectionParameters;
+import tools.ToHtmlConverter;
 
 public class SearchServlet extends HttpServlet {
 	
@@ -123,7 +123,7 @@ public class SearchServlet extends HttpServlet {
 		}
 		else {
 			for (Person person: persons) {
-				body += "<p>" + person.toHtmlString(searchCriteria) + "</p>\n";
+				body += "<p>" + ToHtmlConverter.convertToHtmlString(person, searchCriteria) + "</p>\n";
 			}
 		}
 		body += "<p><a href=\"index.html\">back to main page</a></p>\n";

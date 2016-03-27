@@ -13,7 +13,6 @@ import java.util.Set;
 import datatypes.Person;
 import searching.DefaultCaseException;
 import searching.SearchParameters;
-import searching.SearchType;
 import tools.PersonSkillStatistics;
 
 public class SocketClient implements AutoCloseable {
