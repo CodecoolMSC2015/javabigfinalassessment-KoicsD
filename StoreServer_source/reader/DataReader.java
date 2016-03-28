@@ -1,6 +1,5 @@
 package reader;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -67,16 +66,16 @@ public abstract class DataReader {
 	}
 	
 	// abstract of searcher:
-	public Set<Person> getPersons() throws IOException {
+	public Set<Person> getPersons() throws ReaderException {
 		return getPersons(searchCriteria, searchType);
 	}
 	
-	public Set<Person> getPersons(SearchParameters searchParameters) throws IOException {
+	public Set<Person> getPersons(SearchParameters searchParameters) throws ReaderException {
 		if (searchParameters == null)
 			throw new NullPointerException("You cannot invoke getPersons with null as 'searchParameters'");
 		return getPersons(searchParameters.getSearchCriteria(), searchParameters.getSearchType());
 	}
 	
-	public abstract Set<Person> getPersons(Set<String> searchCriteria, SearchType searchType) throws IOException;
+	public abstract Set<Person> getPersons(Set<String> searchCriteria, SearchType searchType) throws ReaderException;
 
 }

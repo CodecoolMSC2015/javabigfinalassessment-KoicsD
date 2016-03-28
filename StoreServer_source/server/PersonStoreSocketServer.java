@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 
 import reader.CSVDataReader;
 import reader.DataReader;
+import reader.ReaderException;
 import tools.ConnectionParameters;
 
 public class PersonStoreSocketServer implements AutoCloseable {
@@ -20,7 +21,7 @@ public class PersonStoreSocketServer implements AutoCloseable {
 	private boolean running = false;
 	
 	// constructor:
-	public PersonStoreSocketServer(int port, String csvFilePath) throws IOException {
+	public PersonStoreSocketServer(int port, String csvFilePath) throws IOException, ReaderException {
 		if (csvFilePath == null)
 			throw new NullPointerException("Paramter 'csvFilePath' cannot be null when instantiating a PersonStoreSocketServer");
 		serverSocket = new ServerSocket(port);
@@ -50,7 +51,7 @@ public class PersonStoreSocketServer implements AutoCloseable {
 			try (SocketSession connection = new SocketSession(this)) {
 				this.connection = connection;  // let it be instance-level
 				this.connection.start();
-			} catch (IOException e) {
+			} catch (IOException | ReaderException e) {
 				running = false;
 				e.printStackTrace();
 			} finally {
@@ -69,7 +70,7 @@ public class PersonStoreSocketServer implements AutoCloseable {
 		serverSocket.close();
 	}
 	
-	public static void setupAt(int portNumber, String csvFilePath) throws IOException {
+	public static void setupAt(int portNumber, String csvFilePath) throws IOException, ReaderException {
 		try (PersonStoreSocketServer server = new PersonStoreSocketServer(portNumber, csvFilePath)) {
 			server.start();
 		}
@@ -78,7 +79,7 @@ public class PersonStoreSocketServer implements AutoCloseable {
 	public static void main(String[] args) {
 		try {
 			setupAt(PORT_NUMBER, CSV_FILE_PATH);
-		} catch (IOException e) {
+		} catch (IOException | ReaderException e) {
 			e.printStackTrace();
 		}
 	}

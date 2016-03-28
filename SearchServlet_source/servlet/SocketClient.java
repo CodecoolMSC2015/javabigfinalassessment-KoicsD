@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Set;
 
 import datatypes.Person;
-import searching.DefaultCaseException;
 import searching.SearchParameters;
 import tools.PersonSkillStatistics;
 
@@ -46,7 +45,7 @@ public class SocketClient implements AutoCloseable {
 		case OPTIONAL:
 			return orderPersons(persons, searchParameters.getSearchCriteria(), OrderType.MAX);
 		default:  // unreachable
-			throw new DefaultCaseException("No valid SearchType specified in 'searchParameters' in method SocketClient.getPersons");
+			throw new IllegalArgumentException("No valid SearchType specified in 'searchParameters' in method SocketClient.getPersons");
 		}
 	}
 	

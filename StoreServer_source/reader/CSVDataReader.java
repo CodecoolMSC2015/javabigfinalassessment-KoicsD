@@ -15,7 +15,6 @@ import com.csvreader.CsvReader;
 import datatypes.Employee;
 import datatypes.Person;
 import datatypes.Skill;
-import searching.DefaultCaseException;
 import searching.SearchParameters;
 import searching.SearchType;
 
@@ -30,36 +29,36 @@ public class CSVDataReader extends DataReader {
 	private long fileLastParsed = 0l;
 
 	// constructors:
-	public CSVDataReader(String csvFilePath) throws IOException {
+	public CSVDataReader(String csvFilePath) throws ReaderException {
 		super();
 		if (csvFilePath == null)
 			throw new NullPointerException("You cannot instantiate a CSVDataReader for null as 'csvFilePath'");
 		this.csvFile = new File(csvFilePath);
 		if (!this.csvFile.exists() || this.csvFile.length() == 0)
-			throw new IOException("The given CSV-file either does not exist or is empty");
+			throw new ReaderException("The given CSV-file either does not exist or is empty");
 	}
 
-	public CSVDataReader(String csvFilePath, Set<String> searchCriteria, SearchType searchType) throws IOException {
+	public CSVDataReader(String csvFilePath, Set<String> searchCriteria, SearchType searchType) throws ReaderException {
 		super(searchCriteria, searchType);
 		if (csvFilePath == null)
 			throw new NullPointerException("You cannot instantiate a CSVDataReader for null as 'csvFilePath'");
 		this.csvFile = new File(csvFilePath);
 		if (!this.csvFile.exists() || this.csvFile.length() == 0)
-			throw new IOException("The given CSV-file either does not exist or is empty");
+			throw new ReaderException("The given CSV-file either does not exist or is empty");
 	}
 
-	public CSVDataReader(String csvFilePath, SearchParameters searchParameters) throws IOException {
+	public CSVDataReader(String csvFilePath, SearchParameters searchParameters) throws ReaderException {
 		super(searchParameters);
 		if (csvFilePath == null)
 			throw new NullPointerException("You cannot instantiate a CSVDataReader for null as 'csvFilePath'");
 		this.csvFile = new File(csvFilePath);
 		if (!this.csvFile.exists() || this.csvFile.length() == 0)
-			throw new IOException("The given CSV-file either does not exist or is empty");
+			throw new ReaderException("The given CSV-file either does not exist or is empty");
 	}
 
 	// searcher:
 	@Override
-	public Set<Person> getPersons(Set<String> searchCriteria, SearchType searchType) throws IOException {
+	public Set<Person> getPersons(Set<String> searchCriteria, SearchType searchType) throws ReaderException {
 		if (searchCriteria == null || searchType == null)
 			throw new NullPointerException("Neither parameter 'searchCriteria' nor parameter 'searchType' can be null when invoking DataReader.getPersons");
 		Set<Person> matches = new HashSet<Person>();
@@ -76,7 +75,7 @@ public class CSVDataReader extends DataReader {
 					matches.add(person);
 				break;
 			default:  // unreachable, but somehow we have to make compiler calm
-				throw new DefaultCaseException("No valid SearchType specified in CSVDataReader.getPersons");
+				throw new IllegalArgumentException("No valid SearchType specified in CSVDataReader.getPersons");
 			}
 		}
 		return matches;
@@ -102,9 +101,9 @@ public class CSVDataReader extends DataReader {
 	}
 	
 	// CSV data-parser:
-	private void parseFile() throws IOException {
+	private void parseFile() throws ReaderException {
 		CsvReader reader = null;
-		try  {
+		try {  // to catch IOException
 			reader = new CsvReader(csvFile.getAbsolutePath());
 			
 			if (!reader.readHeaders() || !Arrays.equals(CSV_HEADER, reader.getHeaders()))
@@ -121,7 +120,7 @@ public class CSVDataReader extends DataReader {
 				Skill currentSkill;
 				int i;
 				for (int line=0; reader.readRecord(); ++line) {
-					try {
+					try {  // to catch NumberFormatException
 						name = reader.get("Name");
 						email = reader.get("Email");
 						salary = reader.get("Salary");
@@ -160,6 +159,8 @@ public class CSVDataReader extends DataReader {
 				}
 			}
 			this.persons = persons;
+		} catch (IOException e) {
+			throw new ReaderException("An IOException occurred while parsing CSV-file", e);
 		} finally {
 			if (reader != null)
 				reader.close();

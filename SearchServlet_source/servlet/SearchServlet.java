@@ -83,7 +83,7 @@ public class SearchServlet extends HttpServlet {
 		case "optional":
 			return SearchType.OPTIONAL;
 		default:
-			throw new InvalidFormException("User has not specifyed any valid search-types in the form.");
+			throw new InvalidFormException("User has not specifyed any valid searchTypes in the form");
 		}
 	}
 	

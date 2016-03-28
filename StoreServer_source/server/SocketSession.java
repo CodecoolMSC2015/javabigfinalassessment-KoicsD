@@ -9,6 +9,7 @@ import java.util.Set;
 
 import datatypes.Person;
 import reader.DataReader;
+import reader.ReaderException;
 import searching.SearchParameters;
 
 public class SocketSession implements AutoCloseable {
@@ -46,7 +47,7 @@ public class SocketSession implements AutoCloseable {
 	}
 
 	// engine:
-	public void start() {
+	public void start() throws ReaderException {
 		try (	ObjectOutputStream oOS = new ObjectOutputStream(socket.getOutputStream());  // for auto close
 				ObjectInputStream oIS = new ObjectInputStream(socket.getInputStream())) {
 			this.oOS = oOS;  // make them instance-level
@@ -67,14 +68,14 @@ public class SocketSession implements AutoCloseable {
 	}
 	
 	// receiver:
-	private void receive() throws IOException, ClassNotFoundException, ClassCastException {
+	private void receive() throws ReaderException, IOException, ClassNotFoundException, ClassCastException {
 		Object objectReceived = oIS.readObject();
 		searchParameters = (SearchParameters)objectReceived;
 		search();
 		send();
 	}
 	
-	private void search() throws IOException {
+	private void search() throws ReaderException {
 		personsFound = store.getPersons(searchParameters);
 	}
 	
