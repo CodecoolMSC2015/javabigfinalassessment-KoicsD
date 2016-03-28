@@ -1,10 +1,10 @@
 package reader;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Set;
 
 import datatypes.Person;
-import searching.DefaultCaseException;
 import searching.SearchParameters;
 import searching.SearchType;
 
@@ -16,15 +16,20 @@ public abstract class DataReader {
 
 	// constructors:
 	public DataReader() {
-		
+		this.searchCriteria = new HashSet<String>();
+		this.searchType = SearchType.MANDATORY;
 	}
 
 	public DataReader(Set<String> searchCriteria, SearchType searchType) {
+		if (searchCriteria == null || searchType == null)
+			throw new NullPointerException("Neither field 'searchCriteria' nor field 'searchType' can be null in a DataReader object");
 		this.searchCriteria = searchCriteria;
 		this.searchType = searchType;
 	}
 	
 	public DataReader(SearchParameters searchParameters) {
+		if (searchParameters == null)
+			throw new NullPointerException("You cannot instantiate a DataReader object for null as 'searchParameters'");
 		this.searchCriteria = searchParameters.getSearchCriteria();
 		this.searchType = searchParameters.getSearchType();
 	}
@@ -35,6 +40,8 @@ public abstract class DataReader {
 	}
 
 	public void setSearchCriteria(Set<String> searchCriteria) {
+		if (searchCriteria == null)
+			throw new NullPointerException("Field 'searchCriteria' cannot be null in a DataReader object");
 		this.searchCriteria = searchCriteria;
 	}
 
@@ -43,6 +50,8 @@ public abstract class DataReader {
 	}
 
 	public void setSearchType(SearchType searchType) {
+		if (searchType == null)
+			throw new NullPointerException("Field 'searchType' cannot be null in a DataReader object");
 		this.searchType = searchType;
 	}
 	
@@ -51,18 +60,20 @@ public abstract class DataReader {
 	}
 	
 	public void setSearchParameters(SearchParameters searchParameters) {
+		if (searchParameters == null)
+			throw new NullPointerException("Parameter 'searchParameters' cannot be null when setting fields of a DataReader object");
 		this.searchCriteria = searchParameters.getSearchCriteria();
 		this.searchType = searchParameters.getSearchType();
 	}
 	
 	// abstract of searcher:
 	public Set<Person> getPersons() throws IOException {
-		if (searchCriteria == null || searchType == null)
-			throw new DefaultCaseException("Search parameters must be set before invoking DataReader.getPerson with no arguments.");
 		return getPersons(searchCriteria, searchType);
 	}
 	
 	public Set<Person> getPersons(SearchParameters searchParameters) throws IOException {
+		if (searchParameters == null)
+			throw new NullPointerException("You cannot invoke getPersons with null as 'searchParameters'");
 		return getPersons(searchParameters.getSearchCriteria(), searchParameters.getSearchType());
 	}
 	

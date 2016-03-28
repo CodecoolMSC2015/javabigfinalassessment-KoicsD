@@ -16,6 +16,7 @@ import datatypes.Employee;
 import datatypes.Person;
 import datatypes.Skill;
 import searching.DefaultCaseException;
+import searching.SearchParameters;
 import searching.SearchType;
 
 public class CSVDataReader extends DataReader {
@@ -27,23 +28,40 @@ public class CSVDataReader extends DataReader {
 	private File csvFile;
 	private List<Person> persons;
 	private long fileLastParsed = 0l;
-	
+
 	// constructors:
 	public CSVDataReader(String csvFilePath) throws IOException {
 		super();
+		if (csvFilePath == null)
+			throw new NullPointerException("You cannot instantiate a CSVDataReader for null as 'csvFilePath'");
 		this.csvFile = new File(csvFilePath);
 		if (!this.csvFile.exists() || this.csvFile.length() == 0)
 			throw new IOException("The given CSV-file either does not exist or is empty");
 	}
-	
-	public CSVDataReader(Set<String> searchCriteria, SearchType searchType, String csvFilePath) {
+
+	public CSVDataReader(String csvFilePath, Set<String> searchCriteria, SearchType searchType) throws IOException {
 		super(searchCriteria, searchType);
+		if (csvFilePath == null)
+			throw new NullPointerException("You cannot instantiate a CSVDataReader for null as 'csvFilePath'");
 		this.csvFile = new File(csvFilePath);
+		if (!this.csvFile.exists() || this.csvFile.length() == 0)
+			throw new IOException("The given CSV-file either does not exist or is empty");
+	}
+
+	public CSVDataReader(String csvFilePath, SearchParameters searchParameters) throws IOException {
+		super(searchParameters);
+		if (csvFilePath == null)
+			throw new NullPointerException("You cannot instantiate a CSVDataReader for null as 'csvFilePath'");
+		this.csvFile = new File(csvFilePath);
+		if (!this.csvFile.exists() || this.csvFile.length() == 0)
+			throw new IOException("The given CSV-file either does not exist or is empty");
 	}
 
 	// searcher:
 	@Override
 	public Set<Person> getPersons(Set<String> searchCriteria, SearchType searchType) throws IOException {
+		if (searchCriteria == null || searchType == null)
+			throw new NullPointerException("Neither parameter 'searchCriteria' nor parameter 'searchType' can be null when invoking DataReader.getPersons");
 		Set<Person> matches = new HashSet<Person>();
 		if (fileLastParsed < csvFile.lastModified())
 			parseFile();

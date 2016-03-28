@@ -21,6 +21,8 @@ public class PersonStoreSocketServer implements AutoCloseable {
 	
 	// constructor:
 	public PersonStoreSocketServer(int port, String csvFilePath) throws IOException {
+		if (csvFilePath == null)
+			throw new NullPointerException("Paramter 'csvFilePath' cannot be null when instantiating a PersonStoreSocketServer");
 		serverSocket = new ServerSocket(port);
 		store = new CSVDataReader(csvFilePath);
 	}

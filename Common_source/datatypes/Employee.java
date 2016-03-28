@@ -1,21 +1,26 @@
 package datatypes;
 
+import java.util.Set;
+
 public class Employee extends Person {
-	// TODO it would be better to delete empty constructor
+	// TODO if we want to store jobTitle, why is it not present in CSV-file?
 	
 	// instance variables:
 	private int salary;
 	private String jobTitle;
 	
-	public Employee() {
-		super();
-	}
-	
 	public Employee(String name, String email, int salary) {
 		super(name, email);
+		this.jobTitle = "";
 		this.salary = salary;
 	}
 	
+	public Employee(String name, String email, Set<Skill> skillSet, int salary) {
+		super(name, email, skillSet);
+		this.jobTitle = "";
+		this.salary = salary;
+	}
+
 	// getters and setters:
 	public int getSalary() {
 		return salary;
@@ -30,6 +35,8 @@ public class Employee extends Person {
 	}
 	
 	public void setJobTitle(String jobTitle) {
+		if (jobTitle == null)
+			throw new NullPointerException("Field 'jobTitle' cannot be null in an Employee object");
 		this.jobTitle = jobTitle;
 	}
 	

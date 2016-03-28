@@ -14,6 +14,8 @@ public class Skill implements Serializable, HtmlCompatible {
 	// constructor:
 //	public Skill(String name, String description) {
 	public Skill(String name, String description, double rate) {  // where to set rate if not here?
+		if (name == null || description == null)
+			throw new NullPointerException("Neither field 'name' nor field 'description' can be null in a Skill object");
 		this.name = name;
 		this.description = description;
 		this.rate = rate;

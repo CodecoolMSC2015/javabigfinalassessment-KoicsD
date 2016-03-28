@@ -25,12 +25,16 @@ public class SocketClient implements AutoCloseable {
 	
 	// constructor:
 	public SocketClient(String host, int port) throws UnknownHostException, IOException {
+		if (host == null)
+			throw new NullPointerException("Parameter 'host' cannot be null when instantiating a SocketClient");
 		socket = new Socket(host, port);
 	}
 
 	// querier:
 	public List<Person> getPersons(SearchParameters searchParameters) throws IOException, ClassNotFoundException, ClassCastException {
-		Set<Person> persons = null;
+		if (searchParameters == null)
+			throw new NullPointerException("Method SocketClient.getPersons cannot be invoked with null as 'searchParameters'");
+		Set<Person> persons;
 		try (	ObjectOutputStream oOS = new ObjectOutputStream(socket.getOutputStream());
 				ObjectInputStream oIS = new ObjectInputStream(socket.getInputStream())) {
 			oOS.writeObject(searchParameters);
@@ -41,8 +45,8 @@ public class SocketClient implements AutoCloseable {
 			return orderPersons(persons, searchParameters.getSearchCriteria(), OrderType.AVG);
 		case OPTIONAL:
 			return orderPersons(persons, searchParameters.getSearchCriteria(), OrderType.MAX);
-		default:
-			throw new DefaultCaseException("No SearchType specified in searchParameters: search.SearchParameters");
+		default:  // unreachable
+			throw new DefaultCaseException("No valid SearchType specified in 'searchParameters' in method SocketClient.getPersons");
 		}
 	}
 	

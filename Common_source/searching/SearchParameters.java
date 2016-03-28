@@ -11,6 +11,8 @@ public class SearchParameters implements Serializable {
 	
 	// constructor:
 	public SearchParameters(Set<String> searchCriteria, SearchType searchType) {
+		if (searchCriteria == null || searchType == null)
+			throw new NullPointerException("Neither field 'searchCriteria' nor field 'searchType' can be null in SearchParameters");
 		this.searchCriteria = searchCriteria;
 		this.searchType = searchType;
 	}
