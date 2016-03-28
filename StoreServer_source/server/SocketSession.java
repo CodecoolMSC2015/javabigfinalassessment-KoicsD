@@ -55,7 +55,7 @@ public class SocketSession implements AutoCloseable {
 			}
 		} catch (EOFException e) {
 			// ObjectOutputStream closed on the other side, nothing to do.
-		} catch (IOException e) {
+		} catch (IOException | ClassNotFoundException | ClassCastException e) {
 			e.printStackTrace();
 		} finally {
 			running = false;
@@ -65,30 +65,20 @@ public class SocketSession implements AutoCloseable {
 	}
 	
 	// receiver:
-	private void receive() throws IOException {
-		try {
-			Object objectReceived = oIS.readObject();
-			searchParameters = (SearchParameters)objectReceived;
-			getPersons();
-			sendPersons();
-		} catch (ClassNotFoundException | ClassCastException e) {
-			sendNull();
-			e.printStackTrace();
-		}
+	private void receive() throws IOException, ClassNotFoundException, ClassCastException {
+		Object objectReceived = oIS.readObject();
+		searchParameters = (SearchParameters)objectReceived;
+		doSearch();
+		send();
 	}
 	
-	private void getPersons() throws IOException {
+	private void doSearch() throws IOException {
 		personsFound = store.getPersons(searchParameters);
 	}
 	
 	// sender:
-	private void sendPersons() throws IOException {
+	private void send() throws IOException {
 		oOS.writeObject(personsFound);
-	}
-	
-	// handler for wrong request: TODO something smarter should be used
-	private void sendNull() throws IOException {
-		oOS.writeObject(null);
 	}
 	
 	// stopper:

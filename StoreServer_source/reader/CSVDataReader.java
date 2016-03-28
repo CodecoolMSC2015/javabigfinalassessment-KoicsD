@@ -29,9 +29,11 @@ public class CSVDataReader extends DataReader {
 	private long fileLastParsed = 0l;
 	
 	// constructors:
-	public CSVDataReader(String csvFilePath) {
+	public CSVDataReader(String csvFilePath) throws IOException {
 		super();
 		this.csvFile = new File(csvFilePath);
+		if (!this.csvFile.exists() || this.csvFile.length() == 0)
+			throw new IOException("The given CSV-file either does not exist or is empty");
 	}
 	
 	public CSVDataReader(Set<String> searchCriteria, SearchType searchType, String csvFilePath) {
