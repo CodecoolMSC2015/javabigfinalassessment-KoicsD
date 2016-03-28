@@ -137,7 +137,7 @@ public class SearchServlet extends HttpServlet {
 		writer.print(generateHTML("IOException Occurred",
 				"<h1>An Exception has Occurred.</h1>\n"
 				+ "<p>Type: " + e.getClass().getName() + "</p>\n"
-				+ "<p>Message: " + e.getMessage() + "</p>\n"
+				+ (e.getMessage() != null ? ("<p>Message: " + e.getMessage() + "</p>\n") : "")
 				+ "<p><a href=\"index.html\">back to main page</a></p>\n"));
 	}
 	
