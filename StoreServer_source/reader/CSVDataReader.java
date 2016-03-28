@@ -103,13 +103,13 @@ public class CSVDataReader extends DataReader {
 	// CSV data-parser:
 	private void parseFile() throws ReaderException {
 		CsvReader reader = null;
-		try {  // to catch IOException
+		try {  // to pack IOException into ReaderException
 			reader = new CsvReader(csvFile.getAbsolutePath());
 			
 			if (!reader.readHeaders() || !Arrays.equals(CSV_HEADER, reader.getHeaders()))
 				throw new IOException("Invalid CSV-file header");
 			List<Person> persons = new ArrayList<Person>();
-			{
+			{  // intermediate block for loop-variables
 				String name;
 				String email;
 				String skill;
@@ -156,11 +156,11 @@ public class CSVDataReader extends DataReader {
 						salary = null;
 						skillRate = null;
 					}
-				}
-			}
+				}  // for-loop
+			}  // intermediate block for loop-variables
 			this.persons = persons;
-		} catch (IOException e) {
-			throw new ReaderException("An IOException occurred while parsing CSV-file", e);
+		} catch (IOException iOException) {
+			throw new ReaderException("An IOException occurred while parsing CSV-file", iOException);
 		} finally {
 			if (reader != null)
 				reader.close();
