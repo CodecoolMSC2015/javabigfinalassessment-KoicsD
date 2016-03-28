@@ -103,7 +103,7 @@ public class SearchServlet extends HttpServlet {
 		}
 		Map<SearchParameters, List<Person>> searchHistory = (Map<SearchParameters, List<Person>>)session.getAttribute("searchHistory");
 		SearchParameters searchParameters = new SearchParameters(searchCriteria, searchType);
-		if (searchHistory.containsKey(searchParameters))  // TODO always returns false
+		if (searchHistory.containsKey(searchParameters))
 			return searchHistory.get(searchParameters);
 		try (SocketClient socketClient = new SocketClient(	getInitParameter("storeServerHost"),  // socket connection auto close
 				ConnectionParameters.getPortNumber())) {
