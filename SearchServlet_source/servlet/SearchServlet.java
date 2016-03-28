@@ -61,11 +61,11 @@ public class SearchServlet extends HttpServlet {
 	private void ensureInitParams() throws InvalidConfigurationException {
 		Enumeration<String> parameterNames = getInitParameterNames();
 		if (!parameterNames.hasMoreElements())
-			throw new InvalidConfigurationException("Web content descriptor must define one initial parameter for SearchServlet, named 'storeServerHost'");
+			throw new InvalidConfigurationException("Web content descriptor must define one initial parameter for servlet.SearchServlet, named 'storeServerHost'");
 		if(!parameterNames.nextElement().equals("storeServerHost"))
-			throw new InvalidConfigurationException("Web content descriptor must define one initial parameter for SearchServlet, named 'storeServerHost'");
+			throw new InvalidConfigurationException("Web content descriptor must define one initial parameter for servlet.SearchServlet, named 'storeServerHost'");
 		if(parameterNames.hasMoreElements())
-			throw new InvalidConfigurationException("Web content descriptor must define one initial parameter for SearchServlet, named 'storeServerHost'");
+			throw new InvalidConfigurationException("Web content descriptor must define one initial parameter for servlet.SearchServlet, named 'storeServerHost'");
 	}
 	
 	// making sure form contains the necessary fields:

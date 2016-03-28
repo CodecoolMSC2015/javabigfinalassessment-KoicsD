@@ -8,10 +8,14 @@ import datatypes.Skill;
 public class PersonSkillStatistics {
 	
 	public static double getMaxSkillRate(Person person) {
-		return getMaxSkillRate(person, MatchDefiner.getSkillNameSet(person));
+		return getMaxSkillRate(person, null);
 	}
 	
 	public static double getMaxSkillRate(Person person, Set<String> skillNamesToConsider) {
+		if (person == null)
+			throw new NullPointerException("Parameter 'person' cannot be null in method tools.PersonStatistics.getMaxSkillRate");
+		if (skillNamesToConsider == null)
+			skillNamesToConsider = MatchDefiner.getSkillNameSet(person);
 		double maxSkillRate = 0;
 		boolean first = true;
 		for (Skill skill: person.getSkillSet()) {
@@ -28,18 +32,26 @@ public class PersonSkillStatistics {
 	}
 	
 	public static double getAverageSkillRate(Person person) {
-		return getTotalSkillRate(person) / getNumberOfSkills(person);
+		return getAverageSkillRate(person, null);
 	}
 	
 	public static double getAverageSkillRate(Person person, Set<String> skillNamesToConsider) {
+		if (person == null)
+			throw new NullPointerException("Parameter 'person' cannot be null in method tools.PersonStatistics.getAverageSkillRate");
+		if (skillNamesToConsider == null)
+			skillNamesToConsider = MatchDefiner.getSkillNameSet(person);
 		return getTotalSkillRate(person, skillNamesToConsider) / getNumberOfSkills(person, skillNamesToConsider);
 	}
 	
 	public static int getNumberOfSkills(Person person) {
-		return person.getNumberOfSkills();
+		return getNumberOfSkills(person, null);
 	}
 	
 	public static int getNumberOfSkills(Person person, Set<String> skillNamesToConsider) {
+		if (person == null)
+			throw new NullPointerException("Parameter 'person' cannot be null in method tools.PersonStatistics.getNumberOfSkills");
+		if (skillNamesToConsider == null)
+			return person.getNumberOfSkills();
 		int numberOfSkills = 0;
 		for (Skill skill: person.getSkillSet())
 			if (MatchDefiner.doesElementMatchAnyKeys(skill.getName(), skillNamesToConsider))
@@ -48,10 +60,14 @@ public class PersonSkillStatistics {
 	}
 	
 	public static double getTotalSkillRate(Person person) {
-		return getTotalSkillRate(person, MatchDefiner.getSkillNameSet(person));
+		return getTotalSkillRate(person, null);
 	}
 	
 	public static double getTotalSkillRate(Person person, Set<String> skillNamesToConsider) {
+		if (person == null)
+			throw new NullPointerException("Parameter 'person' cannot be null in method tools.PersonStatistics.getTotalSkillRate");
+		if (skillNamesToConsider == null)
+			skillNamesToConsider = MatchDefiner.getSkillNameSet(person);
 		double totalSkillRate = 0;
 		for (Skill skill: person.getSkillSet()) {
 			if (MatchDefiner.doesElementMatchAnyKeys(skill.getName(), skillNamesToConsider))

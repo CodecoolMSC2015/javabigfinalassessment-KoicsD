@@ -28,7 +28,7 @@ public class SocketSession implements AutoCloseable {
 	// constructor:
 	public SocketSession(PersonStoreSocketServer parent) throws IOException {
 		if (parent == null)
-			throw new NullPointerException("You cannot instantiate a SocketSession object for null as field 'parent'");
+			throw new NullPointerException("You cannot instantiate a server.SocketSession object for null as field 'parent'");
 		socket = parent.getServerSocket().accept();
 		store = parent.getStore();
 	}

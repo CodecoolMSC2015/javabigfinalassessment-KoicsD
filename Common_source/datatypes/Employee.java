@@ -36,7 +36,7 @@ public class Employee extends Person {
 	
 	public void setJobTitle(String jobTitle) {
 		if (jobTitle == null)
-			throw new NullPointerException("Field 'jobTitle' cannot be null in an Employee object");
+			throw new NullPointerException("Field 'jobTitle' cannot be null in a datatypes.Employee object");
 		this.jobTitle = jobTitle;
 	}
 	

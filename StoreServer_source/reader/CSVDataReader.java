@@ -33,7 +33,7 @@ public class CSVDataReader extends DataReader {
 	public CSVDataReader(String csvFilePath) throws ReaderException {
 		super();
 		if (csvFilePath == null)
-			throw new NullPointerException("You cannot instantiate a CSVDataReader for null as 'csvFilePath'");
+			throw new NullPointerException("You cannot instantiate a reader.CSVDataReader for null as 'csvFilePath'");
 		this.csvFile = new File(csvFilePath);
 		if (!this.csvFile.exists() || this.csvFile.length() == 0)
 			throw new ReaderException("The given CSV-file either does not exist or is empty");
@@ -42,7 +42,7 @@ public class CSVDataReader extends DataReader {
 	public CSVDataReader(String csvFilePath, Set<String> searchCriteria, SearchType searchType) throws ReaderException {
 		super(searchCriteria, searchType);
 		if (csvFilePath == null)
-			throw new NullPointerException("You cannot instantiate a CSVDataReader for null as 'csvFilePath'");
+			throw new NullPointerException("You cannot instantiate a reader.CSVDataReader for null as 'csvFilePath'");
 		this.csvFile = new File(csvFilePath);
 		if (!this.csvFile.exists() || this.csvFile.length() == 0)
 			throw new ReaderException("The given CSV-file either does not exist or is empty");
@@ -51,7 +51,7 @@ public class CSVDataReader extends DataReader {
 	public CSVDataReader(String csvFilePath, SearchParameters searchParameters) throws ReaderException {
 		super(searchParameters);
 		if (csvFilePath == null)
-			throw new NullPointerException("You cannot instantiate a CSVDataReader for null as 'csvFilePath'");
+			throw new NullPointerException("You cannot instantiate a reader.CSVDataReader for null as 'csvFilePath'");
 		this.csvFile = new File(csvFilePath);
 		if (!this.csvFile.exists() || this.csvFile.length() == 0)
 			throw new ReaderException("The given CSV-file either does not exist or is empty");
@@ -61,7 +61,7 @@ public class CSVDataReader extends DataReader {
 	@Override
 	public Set<Person> getPersons(Set<String> searchCriteria, SearchType searchType) throws ReaderException {
 		if (searchCriteria == null || searchType == null)
-			throw new NullPointerException("Neither parameter 'searchCriteria' nor parameter 'searchType' can be null when invoking DataReader.getPersons");
+			throw new NullPointerException("Neither parameter 'searchCriteria' nor parameter 'searchType' can be null when invoking reader.DataReader.getPersons");
 		Set<Person> matches = new HashSet<Person>();
 		if (fileLastParsed < csvFile.lastModified())
 			parseFile();
@@ -76,7 +76,7 @@ public class CSVDataReader extends DataReader {
 					matches.add(person);
 				break;
 			default:  // unreachable, but somehow we have to make compiler calm
-				throw new IllegalArgumentException("No valid SearchType specified in CSVDataReader.getPersons");
+				throw new IllegalArgumentException("No valid SearchType specified in reader.CSVDataReader.getPersons");
 			}
 		}
 		return matches;
@@ -89,7 +89,7 @@ public class CSVDataReader extends DataReader {
 			reader = new CsvReader(csvFile.getAbsolutePath());
 			
 			if (!reader.readHeaders() || !Arrays.equals(CSV_HEADER, reader.getHeaders()))
-				throw new IOException("Invalid CSV-file header");
+				throw new ReaderException("Invalid CSV-file header");
 			List<Person> persons = new ArrayList<Person>();
 			{  // intermediate block for loop-variables
 				String name;
@@ -141,8 +141,8 @@ public class CSVDataReader extends DataReader {
 				}  // for-loop
 			}  // intermediate block for loop-variables
 			this.persons = persons;
-		} catch (IOException iOException) {
-			throw new ReaderException("An IOException occurred while parsing CSV-file", iOException);
+		} catch (IOException ioException) {
+			throw new ReaderException("An IOException occurred while parsing CSV-file", ioException);
 		} finally {
 			if (reader != null)
 				reader.close();

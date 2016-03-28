@@ -19,6 +19,8 @@ public class ToHtmlConverter {
 	}
 	
 	public static String toHtmlTag(String tagName, Map<String, String> properties, String value) {
+		if (tagName == null || value == null)
+			throw new NullPointerException("Neither parameter 'tagName' nor parameter 'value' can be null in method tools.ToHtmlConverter.toHtmlTag");
 		String tag = "";
 		tag += "<" + tagName;
 		if (properties != null)
@@ -38,6 +40,8 @@ public class ToHtmlConverter {
 	}
 	
 	public static String convertToHtmlString(Person person, Set<String> skillNamesToHighlight) {
+		if (person == null)
+			throw new NullPointerException("Parameter 'person' cannot be null in method tools.ToHtmlConverter.convertToHtmlString");
 		String personInHtml = person.getName() + "<br/>";
 		personInHtml += "&nbsp;&nbsp;Email: " + person.getEmail() + "<br/>";
 		if (person instanceof Employee)
@@ -68,6 +72,8 @@ public class ToHtmlConverter {
 	}
 	
 	public static String convertToTableRecords(Person person, Set<String> skillNamesToHighlight) {
+		if (person == null)
+			throw new NullPointerException("Parameter 'person' cannot be null in method tools.ToHtmlConverter.convertToTableRecords");
 		String[] nonSkillContent = getNonSkillContent(person);
 		Set<Skill> skillSet = person.getSkillSet();
 		return buildRecords(nonSkillContent, skillSet, skillNamesToHighlight);

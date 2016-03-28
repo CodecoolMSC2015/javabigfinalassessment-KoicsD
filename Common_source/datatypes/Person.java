@@ -16,7 +16,7 @@ public class Person implements Serializable, HtmlCompatible {
 	// constructors:
 	public Person(String name, String email) {
 		if (name == null || email == null)
-			throw new NullPointerException("Neither field 'name', nor field 'email' can be null in a Person object");
+			throw new NullPointerException("Neither field 'name', nor field 'email' can be null in a datatypes.Person object");
 		this.name = name;
 		this.email = email;
 		this.skillSet = new HashSet<Skill>();
@@ -24,7 +24,7 @@ public class Person implements Serializable, HtmlCompatible {
 
 	public Person(String name, String email, Set<Skill> skillSet) {
 		if (name == null || email == null || skillSet == null)
-			throw new NullPointerException("Neither field 'name', nor field 'email', nor field 'skillSet' can be null in a Person object");
+			throw new NullPointerException("Neither field 'name', nor field 'email', nor field 'skillSet' can be null in a datatypes.Person object");
 		this.name = name;
 		this.email = email;
 		this.skillSet = skillSet;
@@ -37,7 +37,7 @@ public class Person implements Serializable, HtmlCompatible {
 
 	public void setName(String name) {
 		if (name == null)
-			throw new NullPointerException("Field 'name' cannot be null in a Person object");
+			throw new NullPointerException("Field 'name' cannot be null in a datatypes.Person object");
 		this.name = name;
 	}
 
@@ -47,7 +47,7 @@ public class Person implements Serializable, HtmlCompatible {
 
 	public void setEmail(String email) {
 		if (email == null)
-			throw new NullPointerException("Field 'email' cannot be null in a Person object");
+			throw new NullPointerException("Field 'email' cannot be null in a datatypes.Person object");
 		this.email = email;
 	}
 
@@ -57,14 +57,14 @@ public class Person implements Serializable, HtmlCompatible {
 
 	public void setSkillSet(Set<Skill> skillSet) {
 		if (skillSet == null)
-			throw new NullPointerException("Field 'skillSet' cannot be null in a Person object");
+			throw new NullPointerException("Field 'skillSet' cannot be null in a datatypes.Person object");
 		this.skillSet = skillSet;
 	}
 	
 	// further tools for skillSet:
 	public void addSkill(Skill skill) {
 		if (skill == null)
-			throw new NullPointerException("null cannot be added to a Person object as skill");
+			throw new NullPointerException("null cannot be added to a datatypes.Person object as new Skill");
 		skillSet.add(skill);
 	}
 	
