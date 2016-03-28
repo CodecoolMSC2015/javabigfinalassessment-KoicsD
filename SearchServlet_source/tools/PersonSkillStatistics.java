@@ -15,7 +15,7 @@ public class PersonSkillStatistics {
 		double maxSkillRate = 0;
 		boolean first = true;
 		for (Skill skill: person.getSkillSet()) {
-			if (skillNamesToConsider.contains(skill.getName())) {
+			if (MatchDefiner.doesElementMatchAnyKeys(skill.getName(), skillNamesToConsider)) {
 				if (first) {
 					maxSkillRate = skill.getRate();
 					first = false;
@@ -42,7 +42,7 @@ public class PersonSkillStatistics {
 	public static int getNumberOfSkills(Person person, Set<String> skillNamesToConsider) {
 		int numberOfSkills = 0;
 		for (Skill skill: person.getSkillSet())
-			if (skillNamesToConsider.contains(skill.getName()))
+			if (MatchDefiner.doesElementMatchAnyKeys(skill.getName(), skillNamesToConsider))
 				++ numberOfSkills;
 		return numberOfSkills;
 	}
@@ -54,7 +54,7 @@ public class PersonSkillStatistics {
 	public static double getTotalSkillRate(Person person, Set<String> skillNamesToConsider) {
 		double totalSkillRate = 0;
 		for (Skill skill: person.getSkillSet()) {
-			if (skillNamesToConsider.contains(skill.getName()))
+			if (MatchDefiner.doesElementMatchAnyKeys(skill.getName(), skillNamesToConsider))
 				totalSkillRate += skill.getRate();
 		}
 		return totalSkillRate;
