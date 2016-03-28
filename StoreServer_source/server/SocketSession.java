@@ -32,9 +32,7 @@ public class SocketSession implements AutoCloseable {
 		store = parent.getStore();
 		System.err.println("Waiting for Client's connection...");
 		socket = parent.getServerSocket().accept();
-		System.err.println("Client connected at local port: " + socket.getLocalPort());
-		System.err.println("\tHost: " + socket.getInetAddress());
-		System.err.println("\tPort: " + socket.getPort());
+		System.err.println("Client connected at: " + socket.getInetAddress() + ":" + socket.getPort() + " (local port: " + socket.getLocalPort() + ")");
 	}
 	
 	// getters:
@@ -98,7 +96,7 @@ public class SocketSession implements AutoCloseable {
 	@Override
 	public void close() throws IOException {
 		socket.close();
-		System.out.println("Client-connection at local port " + socket.getLocalPort() + " closed");
+		System.err.println("Client-connection at " + socket.getInetAddress() + ":" + socket.getPort() + " (local port: " + socket.getLocalPort() +  ") closed");
 	}
 
 }
