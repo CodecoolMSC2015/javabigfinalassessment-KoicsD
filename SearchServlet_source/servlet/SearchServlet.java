@@ -102,13 +102,13 @@ public class SearchServlet extends HttpServlet {
 			session.setAttribute("searchHistory", new HashMap<SearchParameters, List<Person>>());
 		}
 		Map<SearchParameters, List<Person>> searchHistory = (Map<SearchParameters, List<Person>>)session.getAttribute("searchHistory");
-		SearchParameters parameters = new SearchParameters(searchCriteria, searchType);
-		if (searchHistory.containsKey(parameters))
-			return searchHistory.get(parameters);
+		SearchParameters searchParameters = new SearchParameters(searchCriteria, searchType);
+		if (searchHistory.containsKey(searchParameters))  // TODO always returns false
+			return searchHistory.get(searchParameters);
 		try (SocketClient socketClient = new SocketClient(	getInitParameter("storeServerHost"),  // socket connection auto close
 				ConnectionParameters.getPortNumber())) {
-			List<Person> personsReceived = socketClient.getPersons(parameters);
-			searchHistory.put(parameters, personsReceived);
+			List<Person> personsReceived = socketClient.getPersons(searchParameters);
+			searchHistory.put(searchParameters, personsReceived);
 			return personsReceived;
 		}
 	}
