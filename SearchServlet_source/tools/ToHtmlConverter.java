@@ -45,7 +45,7 @@ public class ToHtmlConverter {
 		if (!person.getSkillSet().isEmpty()) {
 			personInHtml += "&nbsp;&nbsp;Skills:<br/>";
 			for (Skill skill: person.getSkillSet()) {
-				if (skillNamesToHighlight != null && skillNamesToHighlight.contains(skill.getName()))
+				if (skillNamesToHighlight != null && MatchDefiner.doesElementMatchAnyKeys(skill.getName(), skillNamesToHighlight))
 					personInHtml += "&nbsp;&nbsp;&nbsp;&nbsp;<mark>" + skill.getName() + "</mark>&nbsp;&nbsp;(" + skill.getRate() + ")<br/>";
 				else
 					personInHtml += "&nbsp;&nbsp;&nbsp;&nbsp;" + skill.getName() + "&nbsp;&nbsp;(" + skill.getRate() + ")<br/>";
@@ -100,7 +100,7 @@ public class ToHtmlConverter {
 			boolean firstRecord = true;
 			boolean highlightNecessary;
 			for (Skill skill: skillSet) {
-				highlightNecessary = skillNamesToHighlight != null && skillNamesToHighlight.contains(skill.getName()); 
+				highlightNecessary = skillNamesToHighlight != null && MatchDefiner.doesElementMatchAnyKeys(skill.getName(), skillNamesToHighlight);
 				if (firstRecord) {
 					records += tagAsRecord(
 							tagAsDataCell(skillSet.size(), 1, nonSkillContent[0]) +
