@@ -29,12 +29,16 @@ public class SocketSession implements AutoCloseable {
 	public SocketSession(PersonStoreSocketServer parent) throws IOException {
 		if (parent == null)
 			throw new NullPointerException("You cannot instantiate a server.SocketSession object for null as field 'parent'");
-		socket = parent.getServerSocket().accept();
 		store = parent.getStore();
+		System.err.println("Waiting for Client's connection...");
+		socket = parent.getServerSocket().accept();
+		System.err.println("Client connected at local port: " + socket.getLocalPort());
+		System.err.println("\tHost: " + socket.getInetAddress());
+		System.err.println("\tPort: " + socket.getPort());
 	}
 	
 	// getters:
-	public Socket getServerSocket() {
+	public Socket getSocket() {
 		return socket;
 	}
 	
@@ -57,8 +61,9 @@ public class SocketSession implements AutoCloseable {
 				receive();
 			}
 		} catch (EOFException e) {
-			// ObjectOutputStream closed on the other side, nothing to do.
+			System.err.println("ObjectStream closed by Client");
 		} catch (IOException | ClassNotFoundException | ClassCastException e) {
+			System.err.println("An Exception occurred while communicating with Client:");
 			e.printStackTrace();
 		} finally {
 			running = false;
@@ -93,6 +98,7 @@ public class SocketSession implements AutoCloseable {
 	@Override
 	public void close() throws IOException {
 		socket.close();
+		System.out.println("Client-connection at local port " + socket.getLocalPort() + " closed");
 	}
 
 }

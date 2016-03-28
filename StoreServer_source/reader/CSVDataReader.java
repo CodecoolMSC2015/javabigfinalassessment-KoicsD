@@ -36,7 +36,7 @@ public class CSVDataReader extends DataReader {
 			throw new NullPointerException("You cannot instantiate a reader.CSVDataReader for null as 'csvFilePath'");
 		this.csvFile = new File(csvFilePath);
 		if (!this.csvFile.exists() || this.csvFile.length() == 0)
-			throw new ReaderException("The given CSV-file either does not exist or is empty");
+			throw new ReaderException("The given CSV-file either does not exist or is empty\n\tFile-path: " + csvFile.getAbsolutePath());
 	}
 
 	public CSVDataReader(String csvFilePath, Set<String> searchCriteria, SearchType searchType) throws ReaderException {
@@ -45,7 +45,7 @@ public class CSVDataReader extends DataReader {
 			throw new NullPointerException("You cannot instantiate a reader.CSVDataReader for null as 'csvFilePath'");
 		this.csvFile = new File(csvFilePath);
 		if (!this.csvFile.exists() || this.csvFile.length() == 0)
-			throw new ReaderException("The given CSV-file either does not exist or is empty");
+			throw new ReaderException("The given CSV-file either does not exist or is empty\n\tFile-path: " + csvFile.getAbsolutePath());
 	}
 
 	public CSVDataReader(String csvFilePath, SearchParameters searchParameters) throws ReaderException {
@@ -55,6 +55,11 @@ public class CSVDataReader extends DataReader {
 		this.csvFile = new File(csvFilePath);
 		if (!this.csvFile.exists() || this.csvFile.length() == 0)
 			throw new ReaderException("The given CSV-file either does not exist or is empty");
+	}
+	
+	// getter for CSV-file path:
+	public String getCsvFilePath() {
+		return csvFile.getAbsolutePath();
 	}
 
 	// SEARCHER:
@@ -89,7 +94,7 @@ public class CSVDataReader extends DataReader {
 			reader = new CsvReader(csvFile.getAbsolutePath());
 			
 			if (!reader.readHeaders() || !Arrays.equals(CSV_HEADER, reader.getHeaders()))
-				throw new ReaderException("Invalid CSV-file header");
+				throw new ReaderException("Invalid CSV-file header\n\tFile-path: " + csvFile.getAbsolutePath());
 			List<Person> persons = new ArrayList<Person>();
 			{  // intermediate block for loop-variables
 				String name;
@@ -142,7 +147,7 @@ public class CSVDataReader extends DataReader {
 			}  // intermediate block for loop-variables
 			this.persons = persons;
 		} catch (IOException ioException) {
-			throw new ReaderException("An IOException occurred while parsing CSV-file", ioException);
+			throw new ReaderException("An IOException occurred while parsing CSV-file\n\tFile-path: " + csvFile.getAbsolutePath(), ioException);
 		} finally {
 			if (reader != null)
 				reader.close();
