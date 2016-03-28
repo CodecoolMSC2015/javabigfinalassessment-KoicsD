@@ -8,7 +8,7 @@ import datatypes.Skill;
 public class PersonSkillStatistics {
 	
 	public static double getMaxSkillRate(Person person) {
-		return getMaxSkillRate(person, person.getSkillNameSet());
+		return getMaxSkillRate(person, MatchDefiner.getSkillNameSet(person));
 	}
 	
 	public static double getMaxSkillRate(Person person, Set<String> skillNamesToConsider) {
@@ -48,7 +48,7 @@ public class PersonSkillStatistics {
 	}
 	
 	public static double getTotalSkillRate(Person person) {
-		return getTotalSkillRate(person, person.getSkillNameSet());
+		return getTotalSkillRate(person, MatchDefiner.getSkillNameSet(person));
 	}
 	
 	public static double getTotalSkillRate(Person person, Set<String> skillNamesToConsider) {

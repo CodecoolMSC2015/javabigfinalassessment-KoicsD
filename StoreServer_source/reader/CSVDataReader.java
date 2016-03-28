@@ -17,6 +17,7 @@ import datatypes.Person;
 import datatypes.Skill;
 import searching.SearchParameters;
 import searching.SearchType;
+import tools.MatchDefiner;
 
 public class CSVDataReader extends DataReader {
 	
@@ -56,7 +57,7 @@ public class CSVDataReader extends DataReader {
 			throw new ReaderException("The given CSV-file either does not exist or is empty");
 	}
 
-	// searcher:
+	// SEARCHER:
 	@Override
 	public Set<Person> getPersons(Set<String> searchCriteria, SearchType searchType) throws ReaderException {
 		if (searchCriteria == null || searchType == null)
@@ -67,11 +68,11 @@ public class CSVDataReader extends DataReader {
 		for (Person person: persons) {
 			switch (searchType) {
 			case MANDATORY:
-				if (hasPersonGotAllSkills(person, searchCriteria))
+				if (MatchDefiner.hasPersonGotAllSkills(person, searchCriteria))
 					matches.add(person);
 				break;
 			case OPTIONAL:
-				if (hasPersonGotAnySkills(person, searchCriteria))
+				if (MatchDefiner.hasPersonGotAnySkills(person, searchCriteria))
 					matches.add(person);
 				break;
 			default:  // unreachable, but somehow we have to make compiler calm
@@ -79,25 +80,6 @@ public class CSVDataReader extends DataReader {
 			}
 		}
 		return matches;
-	}
-	
-	// private assistants of searcher:
-	private boolean hasPersonGotAnySkills(Person person, Set<String> criteriumSkillNames) {
-		Set<String> personSkillNames = person.getSkillNameSet();
-		for (String skillName: criteriumSkillNames) {
-			if (personSkillNames.contains(skillName))
-				return true;
-		}
-		return false;
-	}
-	
-	private boolean hasPersonGotAllSkills(Person person, Set<String> criteriumSkillNames) {
-		Set<String> personSkillNames = person.getSkillNameSet();
-		for (String skillName: criteriumSkillNames) {
-			if (!personSkillNames.contains(skillName))
-				return false;
-		}
-		return true;
 	}
 	
 	// CSV data-parser:

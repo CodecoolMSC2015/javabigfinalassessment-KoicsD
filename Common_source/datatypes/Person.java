@@ -72,14 +72,6 @@ public class Person implements Serializable, HtmlCompatible {
 		skillSet.remove(skill);
 	}
 	
-	public Set<String> getSkillNameSet() {
-		Set<String> skillNames = new HashSet<String>();
-		for (Skill skill: skillSet) {
-			skillNames.add(skill.getName());
-		}
-		return skillNames;
-	}
-	
 	public int getNumberOfSkills() {
 		return skillSet.size();
 	}
