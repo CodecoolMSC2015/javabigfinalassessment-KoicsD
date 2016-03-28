@@ -10,7 +10,7 @@ import java.util.Set;
 import datatypes.Person;
 import reader.DataReader;
 import reader.ReaderException;
-import searching.SearchParameters;
+import searchparams.SearchParameters;
 
 public class SocketSession implements AutoCloseable {
 

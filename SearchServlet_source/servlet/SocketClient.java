@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import datatypes.Person;
-import searching.SearchParameters;
+import searchparams.SearchParameters;
 import tools.PersonSkillStatistics;
 
 public class SocketClient implements AutoCloseable {

@@ -4,8 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import datatypes.Person;
-import searching.SearchParameters;
-import searching.SearchType;
+import searchparams.SearchParameters;
+import searchparams.SearchType;
 
 public abstract class DataReader {
 

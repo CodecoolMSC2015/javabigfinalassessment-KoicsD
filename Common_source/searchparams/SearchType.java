@@ -1,4 +1,4 @@
-package searching;
+package searchparams;
 
 import java.io.Serializable;
 

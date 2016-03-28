@@ -16,8 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import datatypes.Person;
-import searching.SearchParameters;
-import searching.SearchType;
+import searchparams.SearchParameters;
+import searchparams.SearchType;
 import tools.ConnectionParameters;
 import tools.ToHtmlConverter;
 

@@ -15,8 +15,8 @@ import com.csvreader.CsvReader;
 import datatypes.Employee;
 import datatypes.Person;
 import datatypes.Skill;
-import searching.SearchParameters;
-import searching.SearchType;
+import searchparams.SearchParameters;
+import searchparams.SearchType;
 import tools.MatchDefiner;
 
 public class CSVDataReader extends DataReader {

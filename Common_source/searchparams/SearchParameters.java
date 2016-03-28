@@ -1,4 +1,4 @@
-package searching;
+package searchparams;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -12,7 +12,7 @@ public class SearchParameters implements Serializable {
 	// constructor:
 	public SearchParameters(Set<String> searchCriteria, SearchType searchType) {
 		if (searchCriteria == null || searchType == null)
-			throw new NullPointerException("Neither field 'searchCriteria' nor field 'searchType' can be null in searching.SearchParameters");
+			throw new NullPointerException("Neither field 'searchCriteria' nor field 'searchType' can be null in searchparams.SearchParameters");
 		this.searchCriteria = searchCriteria;
 		this.searchType = searchType;
 	}
