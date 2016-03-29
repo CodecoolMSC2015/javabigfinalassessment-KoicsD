@@ -32,7 +32,8 @@ public class SocketSession implements AutoCloseable {
 		store = parent.getStore();
 		System.err.println("Waiting for Client's connection...");
 		socket = parent.getServerSocket().accept();
-		System.err.println("Client connected at: " + socket.getInetAddress() + ":" + socket.getPort() + " (local port: " + socket.getLocalPort() + ")");
+		System.err.println("Client connected at: " + socket.getInetAddress() + ":" + socket.getPort() +
+				" (local port: " + socket.getLocalPort() + ")");
 	}
 	
 	// getters:
@@ -59,9 +60,10 @@ public class SocketSession implements AutoCloseable {
 				receive();
 			}
 		} catch (EOFException e) {
-			System.err.println("ObjectStream closed by Client");
+			System.err.println("ObjectStream closed by Client (local port: " + socket.getLocalPort() + ")");
 		} catch (IOException | ClassNotFoundException | ClassCastException e) {
-			System.err.println("An Exception occurred while communicating with Client:");
+			System.err.println("An Exception occurred while communicating with Client (local port:" +
+					socket.getLocalPort() + "):");
 			e.printStackTrace();
 		} finally {
 			running = false;
@@ -96,7 +98,8 @@ public class SocketSession implements AutoCloseable {
 	@Override
 	public void close() throws IOException {
 		socket.close();
-		System.err.println("Client-connection at " + socket.getInetAddress() + ":" + socket.getPort() + " (local port: " + socket.getLocalPort() +  ") closed");
+		System.err.println("Client-connection at " + socket.getInetAddress() + ":" + socket.getPort() +
+				" (local port: " + socket.getLocalPort() +  ") closed");
 	}
 
 }

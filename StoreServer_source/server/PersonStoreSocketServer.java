@@ -6,13 +6,8 @@ import java.net.ServerSocket;
 import reader.CSVDataReader;
 import reader.DataReader;
 import reader.ReaderException;
-import tools.ConnectionParameters;
 
 public class PersonStoreSocketServer implements AutoCloseable {
-	
-	// some settings as static constants:
-	private static final int PORT_NUMBER = ConnectionParameters.getPortNumber();
-	private static final String CSV_FILE_PATH = "ServerData/persons.csv";
 
 	// server-related instance variables:
 	private ServerSocket serverSocket;
@@ -24,7 +19,6 @@ public class PersonStoreSocketServer implements AutoCloseable {
 	public PersonStoreSocketServer(int port, String csvFilePath) throws IOException, ReaderException {
 		if (csvFilePath == null)
 			throw new NullPointerException("Parameter 'csvFilePath' cannot be null when instantiating a server.PersonStoreSocketServer");
-		System.err.println("Setting up server (port: " + port + ")...");
 		store = new CSVDataReader(csvFilePath);
 		serverSocket = new ServerSocket(port);
 		System.err.println("PersonStoreSocketServer established at port " + serverSocket.getLocalPort());
@@ -54,8 +48,9 @@ public class PersonStoreSocketServer implements AutoCloseable {
 			try (SocketSession connection = new SocketSession(this)) {
 				this.connection = connection;  // let it be instance-level
 				this.connection.start();
-			} catch (IOException | ReaderException e) {
+			} catch (ReaderException | IOException e) {
 				running = false;
+				System.err.println("An Exception occurred while running server:");
 				e.printStackTrace();
 			} finally {
 				this.connection = null;  // clear it from instance scope
@@ -81,9 +76,21 @@ public class PersonStoreSocketServer implements AutoCloseable {
 	}
 	
 	public static void main(String[] args) {
+		if (args.length != 2) {
+			System.err.println("Class server.PersonStoreSocketServer ha to be run with 2 command-line arguments," +
+					" CSV-file path and port number, respectively");
+			return;
+		}
+		String csvFilePath;
+		int portNumber = 0;
 		try {
-			setupAt(PORT_NUMBER, CSV_FILE_PATH);
-		} catch (IOException | ReaderException e) {
+			csvFilePath = args[0];
+			portNumber = Integer.valueOf(args[1]);
+			System.err.println("Setting up server...");
+			setupAt(portNumber, csvFilePath);
+		} catch (NumberFormatException | ReaderException | IOException e) {
+			System.err.println("An Exception occurred before/while setting up server" +
+					(portNumber != 0 ? (" at port " + portNumber) : "") + ":");
 			e.printStackTrace();
 		}
 	}

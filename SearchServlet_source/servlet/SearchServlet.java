@@ -18,7 +18,6 @@ import javax.servlet.http.HttpSession;
 import datatypes.Person;
 import searchparams.SearchParameters;
 import searchparams.SearchType;
-import tools.ConnectionParameters;
 import tools.ToHtmlConverter;
 
 public class SearchServlet extends HttpServlet {
@@ -37,7 +36,7 @@ public class SearchServlet extends HttpServlet {
 				List<Person> persons = getPersons(searchCriteria, searchType, req.getSession());  // socket connection here
 				printMatchesAsHtml(persons, searchCriteria, writer);
 			} catch (IOException | ClassNotFoundException | ClassCastException |  // socket-related exceptions
-					InvalidFormException | InvalidConfigurationException e) {  // web-content related exceptions 
+					NumberFormatException | InvalidFormException | InvalidConfigurationException e) {  // web-content related exceptions 
 				e.printStackTrace();
 				reportException(e, writer);
 			}
@@ -60,12 +59,12 @@ public class SearchServlet extends HttpServlet {
 	// making sure initial parameters are defined correctly in Web-XML:
 	private void ensureInitParams() throws InvalidConfigurationException {
 		Enumeration<String> parameterNames = getInitParameterNames();
-		if (!parameterNames.hasMoreElements())
-			throw new InvalidConfigurationException("Web content descriptor must define one initial parameter for servlet.SearchServlet, named 'storeServerHost'");
-		if(!parameterNames.nextElement().equals("storeServerHost"))
-			throw new InvalidConfigurationException("Web content descriptor must define one initial parameter for servlet.SearchServlet, named 'storeServerHost'");
+		if(!parameterNames.hasMoreElements() || !parameterNames.nextElement().equals("storeServerHost"))
+			throw new InvalidConfigurationException("Web content descriptor must define two initial parameters for servlet.SearchServlet, named 'storeServerHost' and 'storeServerPort', respectively");
+		if(!parameterNames.hasMoreElements() || !parameterNames.nextElement().equals("storeServerPort"))
+			throw new InvalidConfigurationException("Web content descriptor must define two initial parameters for servlet.SearchServlet, named 'storeServerHost' and 'storeServerPort', respectively");
 		if(parameterNames.hasMoreElements())
-			throw new InvalidConfigurationException("Web content descriptor must define one initial parameter for servlet.SearchServlet, named 'storeServerHost'");
+			throw new InvalidConfigurationException("Web content descriptor must define two initial parameters for servlet.SearchServlet, named 'storeServerHost' and 'storeServerPort', respectively");
 	}
 	
 	// making sure form contains the necessary fields:
@@ -97,7 +96,7 @@ public class SearchServlet extends HttpServlet {
 	}
 	
 	// intelligent searcher, asks SocketServer only if necessary:
-	private List<Person> getPersons(Set<String> searchCriteria, SearchType searchType, HttpSession session) throws IOException, ClassNotFoundException, ClassCastException {
+	private List<Person> getPersons(Set<String> searchCriteria, SearchType searchType, HttpSession session) throws NumberFormatException, IOException, ClassNotFoundException, ClassCastException {
 		if (session.getAttribute("searchHistory") == null) {
 			session.setAttribute("searchHistory", new HashMap<SearchParameters, List<Person>>());
 		}
@@ -106,7 +105,7 @@ public class SearchServlet extends HttpServlet {
 		if (searchHistory.containsKey(searchParameters))
 			return searchHistory.get(searchParameters);
 		try (SocketClient socketClient = new SocketClient(	getInitParameter("storeServerHost"),  // socket connection auto close
-				ConnectionParameters.getPortNumber())) {
+				Integer.valueOf(getInitParameter("storeServerPort")))) {
 			List<Person> personsReceived = socketClient.getPersons(searchParameters);
 			searchHistory.put(searchParameters, personsReceived);
 			return personsReceived;

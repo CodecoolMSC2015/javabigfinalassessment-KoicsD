@@ -16,6 +16,10 @@
       <param-name>storeServerHost</param-name>
       <param-value>localhost</param-value>
     </init-param>
+    <init-param>
+      <param-name>storeServerPort</param-name>
+      <param-value>9999</param-value>
+    </init-param>
   </servlet>
   <servlet-mapping>
     <servlet-name>search_for_persons</servlet-name>
